@@ -77,6 +77,12 @@ $desktop: 900px;
 
 .content {
   padding: var(--space-8) var(--space-4) var(--space-16);
+
+  &:has(app-canvas-page) {
+    padding: 0;
+    overflow: hidden;
+    height: calc(100dvh - var(--topbar-height));
+  }
 }
 
 @media (min-width: $desktop) {
@@ -102,5 +108,11 @@ $desktop: 900px;
   .content {
     overflow-y: auto;
     padding: var(--space-12) var(--space-12) var(--space-16);
+
+    &:has(app-canvas-page) {
+      padding: 0;
+      overflow: hidden;
+      height: 100dvh;
+    }
   }
 }

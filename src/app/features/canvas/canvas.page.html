@@ -1,0 +1,522 @@
+<div class="canvas-viewport">
+  <!-- Top Floating Lab Toolbar -->
+  <header class="canvas-toolbar" role="toolbar" aria-label="Controles del Canvas">
+    <div class="toolbar-group toolbar-left">
+      <div class="scene-identity">
+        <input
+          id="canvas-title-input"
+          class="title-input"
+          type="text"
+          [value]="sceneManager.activeScene().title"
+          (change)="onTitleChange($event)"
+          (blur)="onTitleChange($event)"
+          title="Editar nombre del diagrama"
+          placeholder="Nombre del diagrama"
+        />
+
+        <div
+          class="save-badge"
+          [class.saved]="sceneManager.saveStatus() === 'saved'"
+          [class.saving]="sceneManager.saveStatus() === 'saving'"
+          [class.dirty]="sceneManager.saveStatus() === 'dirty'"
+          [attr.aria-label]="'Estado de guardado: ' + sceneManager.saveStatus()"
+        >
+          @switch (sceneManager.saveStatus()) {
+            @case ('saved') {
+              <span class="status-dot saved-dot"></span>
+              <span class="status-label">Guardado ✓</span>
+            }
+            @case ('saving') {
+              <span class="status-dot saving-dot"></span>
+              <span class="status-label">Guardando...</span>
+            }
+            @case ('dirty') {
+              <span class="status-dot dirty-dot"></span>
+              <span class="status-label">Modificado</span>
+            }
+          }
+        </div>
+      </div>
+
+      <button
+        id="btn-toggle-scenes"
+        type="button"
+        class="btn-icon-label"
+        (click)="onToggleScenesList()"
+        title="Ver escenas guardadas"
+      >
+        <app-icon name="layers" [size]="16" />
+        <span>Escenas ({{ sceneManager.scenes().length }})</span>
+      </button>
+    </div>
+
+    <div class="toolbar-group toolbar-center">
+      <button
+        id="btn-new-scene"
+        type="button"
+        class="toolbar-btn"
+        (click)="onNewScene()"
+        title="Crear un lienzo en blanco"
+      >
+        <app-icon name="plus" [size]="15" />
+        <span>Nuevo</span>
+      </button>
+
+      <!-- Playgrounds Selector Dropdown -->
+      <div class="playground-dropdown-wrapper">
+        <button
+          id="btn-playgrounds-menu"
+          type="button"
+          class="toolbar-btn highlight"
+          (click)="onTogglePlaygroundMenu()"
+          title="Seleccionar un playground interactivo con animaciones Three.js"
+        >
+          <app-icon name="sparkles" [size]="15" />
+          <span>Playgrounds ({{ playgrounds.length }}) ▾</span>
+        </button>
+
+        @if (isPlaygroundMenuOpen()) {
+          <div class="playgrounds-menu card" role="menu" data-animate="fade-down">
+            <div class="menu-header">
+              <span>Playgrounds Interactivos</span>
+            </div>
+            @for (p of playgrounds; track p.id) {
+              <button
+                type="button"
+                class="playground-menu-item"
+                (click)="onSelectPlayground(p)"
+                role="menuitem"
+              >
+                <div class="item-top">
+                  <span class="item-title">{{ p.title }}</span>
+                  <span class="item-badge">{{ p.badge }}</span>
+                </div>
+                <p class="item-desc">{{ p.summary }}</p>
+              </button>
+            }
+          </div>
+        }
+      </div>
+
+      <button
+        id="btn-start-lesson"
+        type="button"
+        class="toolbar-btn"
+        (click)="onStartCleanArchLesson()"
+        title="Abrir la lección interactiva de Arquitectura Limpia"
+      >
+        <app-icon name="book" [size]="15" />
+        <span>Lección</span>
+      </button>
+    </div>
+
+    <div class="toolbar-group toolbar-right">
+      <button
+        id="btn-zoom-fit"
+        type="button"
+        class="toolbar-btn"
+        (click)="onZoomFit()"
+        title="Centrar y ajustar vista a los elementos"
+      >
+        <app-icon name="maximize" [size]="15" />
+        <span>Ajustar</span>
+      </button>
+
+      <button
+        id="btn-import-file"
+        type="button"
+        class="toolbar-btn"
+        (click)="fileInput.click()"
+        title="Importar archivo .excalidraw o .json"
+      >
+        <app-icon name="upload" [size]="15" />
+        <span>Importar</span>
+      </button>
+      <input
+        #fileInput
+        type="file"
+        accept=".excalidraw,.json"
+        style="display: none"
+        (change)="onFileInputChange($event)"
+      />
+
+      <div class="export-dropdown-wrapper">
+        <button
+          id="btn-export-menu"
+          type="button"
+          class="toolbar-btn"
+          (click)="onToggleExportMenu()"
+          title="Exportar diagrama en diferentes formatos"
+        >
+          <app-icon name="download" [size]="15" />
+          <span>Exportar ▾</span>
+        </button>
+
+        @if (isExportMenuOpen()) {
+          <div class="export-menu card" role="menu">
+            <button
+              id="btn-export-excalidraw"
+              type="button"
+              class="menu-item"
+              (click)="onExport('excalidraw')"
+              role="menuitem"
+            >
+              <strong>.excalidraw</strong>
+              <small>Formato nativo editable</small>
+            </button>
+            <button
+              id="btn-export-png"
+              type="button"
+              class="menu-item"
+              (click)="onExport('png')"
+              role="menuitem"
+            >
+              <strong>.png</strong>
+              <small>Imagen rasterizada HD</small>
+            </button>
+            <button
+              id="btn-export-svg"
+              type="button"
+              class="menu-item"
+              (click)="onExport('svg')"
+              role="menuitem"
+            >
+              <strong>.svg</strong>
+              <small>Gráfico vectorial escalable</small>
+            </button>
+            <button
+              id="btn-export-json"
+              type="button"
+              class="menu-item"
+              (click)="onExport('json')"
+              role="menuitem"
+            >
+              <strong>.json</strong>
+              <small>Datos puros de escena</small>
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  </header>
+
+  <!-- Scenes Drawer Popover -->
+  @if (isScenesListOpen()) {
+    <div class="scenes-drawer card" data-animate="fade-up">
+      <div class="drawer-header">
+        <h3>Escenas Guardadas ({{ sceneManager.scenes().length }})</h3>
+        <div class="drawer-actions">
+          <button
+            type="button"
+            class="mini-btn"
+            (click)="onDuplicateScene()"
+            title="Duplicar escena activa"
+          >
+            <app-icon name="copy" [size]="14" />
+            <span>Duplicar</span>
+          </button>
+          <button
+            type="button"
+            class="mini-btn danger"
+            (click)="onDeleteScene()"
+            title="Eliminar escena activa"
+          >
+            <app-icon name="trash" [size]="14" />
+            <span>Eliminar</span>
+          </button>
+          <button
+            type="button"
+            class="close-btn"
+            (click)="onToggleScenesList()"
+            title="Cerrar panel de escenas"
+          >
+            <app-icon name="x" [size]="16" />
+          </button>
+        </div>
+      </div>
+
+      <div class="scenes-list">
+        @for (item of sceneManager.scenes(); track item.id) {
+          <button
+            type="button"
+            class="scene-list-item"
+            [class.active]="item.id === sceneManager.activeScene().id"
+            (click)="onOpenScene(item.id)"
+          >
+            <div class="item-meta">
+              <span class="item-title">{{ item.title }}</span>
+              <span class="item-sub"
+                >{{ item.elementsCount }} elementos · {{ item.updatedAt | slice: 0 : 10 }}</span
+              >
+            </div>
+            @if (item.id === sceneManager.activeScene().id) {
+              <span class="active-badge">Activa</span>
+            }
+          </button>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Interactive Lesson Stepper Panel -->
+  @if (lessonRuntime.isLessonActive() && lessonRuntime.currentStep(); as step) {
+    <aside class="lesson-panel card" data-animate="fade-left">
+      <div class="lesson-panel-header">
+        <div class="lesson-tag">
+          <app-icon name="book" [size]="14" />
+          <span>{{ lessonRuntime.activeLesson()?.title }}</span>
+        </div>
+        <button
+          type="button"
+          class="close-btn"
+          (click)="onCloseLesson()"
+          title="Cerrar lección interactiva"
+        >
+          <app-icon name="x" [size]="16" />
+        </button>
+      </div>
+
+      <!-- Objectives Header -->
+      @if (lessonRuntime.activeLesson()?.objectives; as objs) {
+        <div class="lesson-objectives-box">
+          <span class="objectives-title">Objetivos de Aprendizaje:</span>
+          <ul>
+            @for (obj of objs; track obj) {
+              <li>{{ obj }}</li>
+            }
+          </ul>
+        </div>
+      }
+
+      <div class="lesson-panel-body">
+        <div class="step-counter">
+          Paso {{ lessonRuntime.currentStepIndex() + 1 }} de {{ lessonRuntime.totalSteps() }}
+        </div>
+        <h2 class="step-title">{{ step.title }}</h2>
+        <p class="step-explanation">{{ step.explanation }}</p>
+
+        @if (step.keyConcept) {
+          <div class="concept-callout">
+            <span class="callout-label">Concepto Clave</span>
+            <p>{{ step.keyConcept }}</p>
+          </div>
+        }
+
+        <!-- Interactive Checkpoint -->
+        @if (step.checkpoint; as cp) {
+          <div
+            class="checkpoint-box"
+            [class.completed]="lessonRuntime.completedCheckpoints().has(cp.id)"
+          >
+            <label class="checkpoint-label">
+              <input
+                type="checkbox"
+                [checked]="lessonRuntime.completedCheckpoints().has(cp.id)"
+                (change)="onToggleCheckpoint(cp.id)"
+              />
+              <span><strong>Checkpoint:</strong> {{ cp.criteria }}</span>
+            </label>
+            @if (cp.hint) {
+              <p class="checkpoint-hint">💡 {{ cp.hint }}</p>
+            }
+          </div>
+        }
+
+        <!-- Interactive Code Snippet Preview -->
+        @if (step.codeSnippet; as code) {
+          <div class="code-box">
+            <div class="code-box-header">
+              <span class="code-filename">
+                <app-icon name="code" [size]="14" />
+                {{ code.filename }}
+              </span>
+              <span class="code-lang">{{ code.language }}</span>
+            </div>
+            <pre class="code-content"><code>{{ code.code }}</code></pre>
+            @if (code.explanation) {
+              <p class="code-explanation">{{ code.explanation }}</p>
+            }
+          </div>
+        }
+
+        <!-- Interactive Quiz Question -->
+        @if (step.question; as q) {
+          <div class="quiz-box">
+            <div class="quiz-title">
+              <app-icon name="help-circle" [size]="15" />
+              <span>Comprobación Rápida</span>
+            </div>
+            <p class="quiz-prompt">{{ q.prompt }}</p>
+            <div class="quiz-options">
+              @for (opt of q.options; track opt; let optIdx = $index) {
+                <button
+                  type="button"
+                  class="quiz-option-btn"
+                  [class.selected]="lessonRuntime.activeQuizAnswer() === optIdx"
+                  [class.correct]="
+                    lessonRuntime.activeQuizAnswer() !== null && optIdx === q.correctIndex
+                  "
+                  [class.incorrect]="
+                    lessonRuntime.activeQuizAnswer() === optIdx && optIdx !== q.correctIndex
+                  "
+                  (click)="onAnswerQuiz(optIdx)"
+                >
+                  <span class="option-idx">{{ optIdx + 1 }}.</span>
+                  <span>{{ opt }}</span>
+                </button>
+              }
+            </div>
+            @if (lessonRuntime.quizFeedback(); as feedback) {
+              <div
+                class="quiz-feedback"
+                [class.success]="feedback.isCorrect"
+                [class.error]="!feedback.isCorrect"
+              >
+                <span>{{ feedback.isCorrect ? '✓ ¡Excelente!' : '✗ Inténtalo de nuevo.' }}</span>
+                <p>{{ feedback.explanation }}</p>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="lesson-panel-footer">
+        <button
+          type="button"
+          class="btn-secondary"
+          [disabled]="lessonRuntime.currentStepIndex() === 0"
+          (click)="onPreviousLessonStep()"
+        >
+          ← Anterior
+        </button>
+        <button
+          type="button"
+          class="btn-primary"
+          [disabled]="lessonRuntime.currentStepIndex() >= lessonRuntime.totalSteps() - 1"
+          (click)="onNextLessonStep()"
+        >
+          Siguiente →
+        </button>
+      </div>
+    </aside>
+  }
+
+  <!-- Canvas Engine Host Container -->
+  <main class="canvas-engine-container">
+    <!-- Excalidraw Host (Isolated React Island) -->
+    <div #canvasContainer class="canvas-host"></div>
+
+    <!-- Three.js WebGL Particle Animation Overlay (100% Lazy Loaded) -->
+    <div #animationOverlay class="animation-overlay-host"></div>
+  </main>
+
+  <!-- Execution Timeline Control Dock (Objective 4 & 5) -->
+  @if (timelinePlayer.timeline(); as tl) {
+    <footer class="timeline-dock card" data-animate="fade-up">
+      <div class="dock-left">
+        <div class="playback-controls">
+          <button
+            type="button"
+            class="control-btn"
+            [disabled]="timelinePlayer.currentFrameIndex() === 0"
+            (click)="onTimelineStepPrev()"
+            title="Frame Anterior"
+          >
+            <app-icon name="arrow-left" [size]="16" />
+          </button>
+
+          <button
+            title="Play"
+            type="button"
+            class="control-btn play-btn"
+            [class.playing]="timelinePlayer.isPlaying()"
+            (click)="onToggleTimelinePlay()"
+            [title]="
+              timelinePlayer.isPlaying() ? 'Pausar Simulación' : 'Reproducir Simulación en Three.js'
+            "
+          >
+            <app-icon [name]="timelinePlayer.isPlaying() ? 'pause' : 'play'" [size]="18" />
+          </button>
+
+          <button
+            type="button"
+            class="control-btn"
+            [disabled]="timelinePlayer.currentFrameIndex() >= timelinePlayer.totalFrames() - 1"
+            (click)="onTimelineStepNext()"
+            title="Siguiente Frame"
+          >
+            <app-icon name="arrow-right" [size]="16" />
+          </button>
+        </div>
+
+        <div class="frame-indicator">
+          <span class="indicator-title"
+            >Frame {{ timelinePlayer.currentFrameIndex() + 1 }} /
+            {{ timelinePlayer.totalFrames() }}</span
+          >
+          <span class="indicator-status">{{ timelinePlayer.status() | uppercase }}</span>
+        </div>
+      </div>
+
+      <div class="dock-center">
+        @if (timelinePlayer.currentFrame(); as cf) {
+          <div class="frame-pill">
+            <span class="pill-dot"></span>
+            <div class="pill-content">
+              <strong>{{ cf.title }}</strong>
+              <small>{{ cf.description }}</small>
+            </div>
+          </div>
+        }
+        <div class="scrubber-bar">
+          <input title="Timeline"
+            type="range"
+            min="0"
+            [max]="timelinePlayer.totalFrames() - 1"
+            [value]="timelinePlayer.currentFrameIndex()"
+            (input)="onTimelineSeek($event)"
+            class="timeline-slider"
+          />
+        </div>
+      </div>
+
+      <div class="dock-right">
+        <div class="speed-selector">
+          <button
+            type="button"
+            class="speed-btn"
+            [class.active]="timelinePlayer.speed() === 0.5"
+            (click)="onTimelineSpeed(0.5)"
+          >
+            0.5x
+          </button>
+          <button
+            type="button"
+            class="speed-btn"
+            [class.active]="timelinePlayer.speed() === 1"
+            (click)="onTimelineSpeed(1)"
+          >
+            1x
+          </button>
+          <button
+            type="button"
+            class="speed-btn"
+            [class.active]="timelinePlayer.speed() === 2"
+            (click)="onTimelineSpeed(2)"
+          >
+            2x
+          </button>
+        </div>
+
+        <button
+          type="button"
+          class="reset-btn"
+          (click)="onTimelineReset()"
+          title="Reiniciar Simulación"
+        >
+          <span>Reiniciar</span>
+        </button>
+      </div>
+    </footer>
+  }
+</div>

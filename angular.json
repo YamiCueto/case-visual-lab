@@ -33,7 +33,25 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.scss"]
+            "styles": ["src/styles.scss"],
+            "allowedCommonJsDependencies": [
+              "@excalidraw/excalidraw",
+              "@excalidraw/mermaid-to-excalidraw",
+              "react",
+              "react-dom",
+              "react-dom/client",
+              "lodash.throttle",
+              "lodash.debounce",
+              "fuzzy",
+              "canvas-roundrect-polyfill",
+              "png-chunks-extract",
+              "png-chunk-text",
+              "png-chunks-encode",
+              "es6-promise-pool",
+              "@braintree/sanitize-url",
+              "pica",
+              "use-sync-external-store"
+            ]
           },
           "configurations": {
             "production": {
@@ -45,8 +63,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "24kB",
+                  "maximumError": "32kB"
                 }
               ],
               "outputHashing": "all"

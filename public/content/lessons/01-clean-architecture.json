@@ -1,0 +1,279 @@
+{
+  "id": "clean-architecture-foundations",
+  "title": "Clean Architecture: La Regla de Dependencia",
+  "category": "Arquitectura de Software",
+  "summary": "Comprende visualmente por qué las dependencias del código fuente solo pueden apuntar hacia adentro, protegiendo las reglas de negocio del dominio.",
+  "level": "Fundamentos",
+  "estimatedMinutes": 8,
+  "metadata": {
+    "id": "clean-architecture-foundations",
+    "slug": "clean-architecture-foundations",
+    "title": "Clean Architecture: La Regla de Dependencia",
+    "category": "Arquitectura de Software",
+    "summary": "Comprende visualmente por qué las dependencias del código fuente solo pueden apuntar hacia adentro.",
+    "level": "Fundamentos",
+    "estimatedMinutes": 8,
+    "author": "CASE OS Architecture Guild",
+    "tags": ["Clean Architecture", "DDD", "Ports & Adapters", "Dependency Inversion"],
+    "icon": "layers"
+  },
+  "objectives": [
+    "Comprender el principio de Inversión de Dependencias (DIP) en arquitecturas hexagonales.",
+    "Distinguir claramente entre el Flujo de Control en runtime y la Dirección de Dependencia en tiempo de compilación.",
+    "Garantizar que el núcleo del dominio jamás importe librerías de infraestructura, frameworks o bases de datos."
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "title": "Paso 1: El Núcleo del Dominio (Entities)",
+      "explanation": "El círculo central contiene las Entidades y Reglas de Negocio Empresariales. Son objetos puros de TypeScript que no conocen qué framework, ORM o protocolo de red existe en el mundo exterior.",
+      "keyConcept": "El dominio es agnóstico a la tecnología y jamás debe importar infraestructura ni paquetes de UI.",
+      "checkpoint": {
+        "id": "cp_1",
+        "criteria": "Verifica que las entidades de dominio no contengan decoradores de base de datos ni referencias a HTTP.",
+        "hint": "En Clean Architecture, si cambias Express por NestJS o PostgreSQL por DynamoDB, el dominio no sufre ningún cambio."
+      },
+      "codeSnippet": {
+        "language": "typescript",
+        "filename": "order.entity.ts",
+        "code": "export class Order {\n  constructor(\n    readonly id: string,\n    private items: readonly OrderItem[],\n    private status: 'PENDING' | 'PAID' = 'PENDING'\n  ) {}\n\n  calculateTotal(): Money {\n    return this.items.reduce((sum, item) => sum.add(item.price), Money.zero());\n  }\n}",
+        "explanation": "Nótese la ausencia total de imports externos: únicamente tipos y estructuras del dominio puro."
+      },
+      "question": {
+        "id": "q_1",
+        "prompt": "¿Qué biblioteca externa puede importar legítimamente una entidad de dominio en Clean Architecture?",
+        "options": [
+          "El cliente de Prisma o TypeORM",
+          "El router de Express o Fastify",
+          "Ninguna librería externa de infraestructura",
+          "Librerías de renderizado visual"
+        ],
+        "correctIndex": 2,
+        "explanation": "Correcto. El dominio no tiene dependencias externas hacia frameworks o infraestructura."
+      },
+      "sceneData": {
+        "elements": [
+          {
+            "id": "circle_domain",
+            "type": "ellipse",
+            "x": 300,
+            "y": 150,
+            "width": 240,
+            "height": 240,
+            "strokeColor": "#00F2FE",
+            "backgroundColor": "#071A21",
+            "fillStyle": "solid",
+            "strokeWidth": 2,
+            "roughness": 0
+          },
+          {
+            "id": "text_domain",
+            "type": "text",
+            "x": 340,
+            "y": 250,
+            "width": 160,
+            "height": 40,
+            "text": "Enterprise Entities\n(Dominio Puro)",
+            "fontSize": 16,
+            "fontFamily": 1,
+            "textAlign": "center",
+            "strokeColor": "#FFFFFF"
+          }
+        ],
+        "appState": { "viewBackgroundColor": "#0b0d10" },
+        "files": {}
+      }
+    },
+    {
+      "step": 2,
+      "title": "Paso 2: Casos de Uso (Application Layer)",
+      "explanation": "La segunda capa envuelve al dominio. Contiene los Casos de Uso (Use Cases / Interactors) que orquestan el flujo hacia y desde las entidades. Define puertos (interfaces abstractas) para acceder al almacenamiento o APIs externas.",
+      "keyConcept": "La capa de aplicación implementa casos de uso y define interfaces (puertos) para que la infraestructura los implemente.",
+      "checkpoint": {
+        "id": "cp_2",
+        "criteria": "Comprobar que el caso de uso inyecte una interfaz de repositorio (puerto) y no la implementación concreta.",
+        "hint": "El puerto `OrderRepositoryPort` pertenece al dominio/aplicación; la clase `PostgresOrderRepository` pertenece a infraestructura."
+      },
+      "codeSnippet": {
+        "language": "typescript",
+        "filename": "create-order.use-case.ts",
+        "code": "export class CreateOrderUseCase {\n  constructor(private readonly orderRepo: OrderRepositoryPort) {}\n\n  async execute(dto: CreateOrderDTO): Promise<OrderResult> {\n    const order = new Order(dto.id, dto.items);\n    await this.orderRepo.save(order);\n    return { success: true, orderId: order.id };\n  }\n}",
+        "explanation": "El caso de uso orquesta la entidad y utiliza el puerto `OrderRepositoryPort` sin conocer la base de datos."
+      },
+      "sceneData": {
+        "elements": [
+          {
+            "id": "circle_app",
+            "type": "ellipse",
+            "x": 220,
+            "y": 70,
+            "width": 400,
+            "height": 400,
+            "strokeColor": "#6D5DFC",
+            "backgroundColor": "#13112A",
+            "fillStyle": "solid",
+            "strokeWidth": 2,
+            "roughness": 0
+          },
+          {
+            "id": "circle_domain",
+            "type": "ellipse",
+            "x": 300,
+            "y": 150,
+            "width": 240,
+            "height": 240,
+            "strokeColor": "#00F2FE",
+            "backgroundColor": "#071A21",
+            "fillStyle": "solid",
+            "strokeWidth": 2,
+            "roughness": 0
+          },
+          {
+            "id": "text_app",
+            "type": "text",
+            "x": 250,
+            "y": 100,
+            "width": 340,
+            "height": 30,
+            "text": "Casos de Uso / Application Layer",
+            "fontSize": 15,
+            "fontFamily": 1,
+            "textAlign": "center",
+            "strokeColor": "#A397FF"
+          },
+          {
+            "id": "text_domain",
+            "type": "text",
+            "x": 340,
+            "y": 250,
+            "width": 160,
+            "height": 40,
+            "text": "Enterprise Entities\n(Dominio Puro)",
+            "fontSize": 16,
+            "fontFamily": 1,
+            "textAlign": "center",
+            "strokeColor": "#FFFFFF"
+          }
+        ],
+        "appState": { "viewBackgroundColor": "#0b0d10" },
+        "files": {}
+      }
+    },
+    {
+      "step": 3,
+      "title": "Paso 3: Infraestructura y Controladores (Outer Ring)",
+      "explanation": "El anillo exterior es donde viven la Web, la Base de Datos, GraphQL y los Frameworks. Estos adaptadores implementan los puertos definidos adentro. La flecha de dependencia apunta siempre hacia adentro.",
+      "keyConcept": "Inversión de Dependencias (DIP): Los detalles dependen de las abstracciones, nunca al revés.",
+      "checkpoint": {
+        "id": "cp_3",
+        "criteria": "Comprobar que todas las flechas de dependencia del código fuente apunten hacia el centro.",
+        "hint": "Cualquier flecha que apunte hacia afuera viola la regla fundamental de Clean Architecture."
+      },
+      "codeSnippet": {
+        "language": "typescript",
+        "filename": "postgres-order.adapter.ts",
+        "code": "export class PostgresOrderAdapter implements OrderRepositoryPort {\n  constructor(private pool: PgPool) {}\n\n  async save(order: Order): Promise<void> {\n    await this.pool.query('INSERT INTO orders VALUES ($1, $2)', [order.id, order.status]);\n  }\n}",
+        "explanation": "El adaptador concreto en infraestructura implementa la interfaz declarada en el dominio interior."
+      },
+      "sceneData": {
+        "elements": [
+          {
+            "id": "circle_infra",
+            "type": "ellipse",
+            "x": 140,
+            "y": -10,
+            "width": 560,
+            "height": 560,
+            "strokeColor": "#00E599",
+            "backgroundColor": "#091F14",
+            "fillStyle": "solid",
+            "strokeWidth": 2,
+            "roughness": 0
+          },
+          {
+            "id": "circle_app",
+            "type": "ellipse",
+            "x": 220,
+            "y": 70,
+            "width": 400,
+            "height": 400,
+            "strokeColor": "#6D5DFC",
+            "backgroundColor": "#13112A",
+            "fillStyle": "solid",
+            "strokeWidth": 2,
+            "roughness": 0
+          },
+          {
+            "id": "circle_domain",
+            "type": "ellipse",
+            "x": 300,
+            "y": 150,
+            "width": 240,
+            "height": 240,
+            "strokeColor": "#00F2FE",
+            "backgroundColor": "#071A21",
+            "fillStyle": "solid",
+            "strokeWidth": 2,
+            "roughness": 0
+          },
+          {
+            "id": "text_infra",
+            "type": "text",
+            "x": 220,
+            "y": 20,
+            "width": 400,
+            "height": 30,
+            "text": "Controladores, Web UI, SQL Database, Dispositivos",
+            "fontSize": 14,
+            "fontFamily": 1,
+            "textAlign": "center",
+            "strokeColor": "#6EE7B7"
+          },
+          {
+            "id": "arrow_dep",
+            "type": "arrow",
+            "x": 640,
+            "y": 270,
+            "width": -120,
+            "height": 0,
+            "points": [
+              [0, 0],
+              [-120, 0]
+            ],
+            "strokeColor": "#00F2FE",
+            "strokeWidth": 3,
+            "roughness": 0,
+            "endArrowhead": "arrow"
+          },
+          {
+            "id": "text_arrow",
+            "type": "text",
+            "x": 540,
+            "y": 240,
+            "width": 120,
+            "height": 20,
+            "text": "Depende de ➔",
+            "fontSize": 12,
+            "fontFamily": 3,
+            "strokeColor": "#00F2FE"
+          },
+          {
+            "id": "text_domain",
+            "type": "text",
+            "x": 340,
+            "y": 250,
+            "width": 160,
+            "height": 40,
+            "text": "Enterprise Entities\n(Dominio Puro)",
+            "fontSize": 16,
+            "fontFamily": 1,
+            "textAlign": "center",
+            "strokeColor": "#FFFFFF"
+          }
+        ],
+        "appState": { "viewBackgroundColor": "#0b0d10" },
+        "files": {}
+      }
+    }
+  ]
+}

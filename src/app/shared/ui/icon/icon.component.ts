@@ -1,7 +1,30 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
 export type IconName =
-  'home' | 'book' | 'layers' | 'sparkles' | 'pen' | 'settings' | 'info' | 'menu' | 'compass';
+  | 'home'
+  | 'book'
+  | 'layers'
+  | 'sparkles'
+  | 'pen'
+  | 'settings'
+  | 'info'
+  | 'menu'
+  | 'compass'
+  | 'plus'
+  | 'check'
+  | 'download'
+  | 'upload'
+  | 'play'
+  | 'pause'
+  | 'maximize'
+  | 'x'
+  | 'copy'
+  | 'trash'
+  | 'code'
+  | 'arrow-left'
+  | 'arrow-right'
+  | 'check-circle'
+  | 'help-circle';
 
 const PATHS: Record<IconName, string> = {
   home: 'M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z',
@@ -15,6 +38,23 @@ const PATHS: Record<IconName, string> = {
   info: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zm0-10v6m0-9.5v.5',
   menu: 'M4 6h16M4 12h16M4 18h16',
   compass: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zm4.2-13.2-2.7 6.9-6.9 2.7 2.7-6.9z',
+  plus: 'M12 5v14M5 12h14',
+  check: 'M20 6 9 17l-5-5',
+  download: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3',
+  upload: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12',
+  play: 'M5 3l14 9-14 9V3z',
+  pause: 'M6 4h4v16H6zM14 4h4v16h-4z',
+  maximize:
+    'M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3',
+  x: 'M18 6 6 18M6 6l12 12',
+  copy: 'M9 9h10v10H9zM5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1',
+  trash: 'M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2',
+  code: 'M16 18l6-6-6-6M8 6l-6 6 6 6',
+  'arrow-left': 'M19 12H5M12 19l-7-7 7-7',
+  'arrow-right': 'M5 12h14M12 5l7 7-7 7',
+  'check-circle': 'M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4L12 14.01l-3-3',
+  'help-circle':
+    'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-6h.01M12 8a2 2 0 0 1 2 2c0 1-1.5 1.5-1.5 2.5',
 };
 
 /** Inline stroke icons: no icon font or network request required. */
