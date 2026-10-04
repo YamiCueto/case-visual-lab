@@ -140,11 +140,25 @@ export class ExcalidrawAdapter implements CanvasRendererPort {
     win.process = win.process || { env: { NODE_ENV: 'production' } };
 
     // Lazy load React and Excalidraw dynamically to keep initial bundle tiny
-    const [React, { createRoot }, ExcalidrawModule] = await Promise.all([
+    const [reactImport, reactDomClientImport, ExcalidrawModule] = await Promise.all([
       import('react'),
       import('react-dom/client'),
       import('@excalidraw/excalidraw'),
     ]);
+
+    type ReactModuleType = typeof import('react') & { default?: typeof import('react') };
+    type ReactDOMClientType = typeof import('react-dom/client') & {
+      default?: typeof import('react-dom/client');
+    };
+
+    const reactMod = reactImport as ReactModuleType;
+    const React = reactMod.default?.createElement ? reactMod.default : reactMod;
+
+    const reactDomMod = reactDomClientImport as ReactDOMClientType;
+    const createRoot = reactDomMod.createRoot ?? reactDomMod.default?.createRoot;
+    if (!createRoot) {
+      throw new Error('Failed to resolve createRoot from react-dom/client');
+    }
 
     this.excalidrawModule = ExcalidrawModule;
     const ExcalidrawComponent = ExcalidrawModule.Excalidraw;
