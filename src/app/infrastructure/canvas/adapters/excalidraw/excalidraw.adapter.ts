@@ -150,7 +150,10 @@ export class ExcalidrawAdapter implements CanvasRendererPort {
     const ExcalidrawComponent = ExcalidrawModule.Excalidraw;
     const sanitizedBeforeMount = sanitizeElements(initialData.elements);
     instrumentLog('MOUNT - BEFORE restoreElements', sanitizedBeforeMount);
-    const sanitizedElements = ExcalidrawModule.restoreElements(sanitizedBeforeMount, null);
+    const sanitizedElements = ExcalidrawModule.restoreElements(
+      sanitizedBeforeMount as Parameters<(typeof ExcalidrawModule)['restoreElements']>[0],
+      null,
+    );
     instrumentLog('MOUNT - AFTER restoreElements', sanitizedElements);
 
     const render = () => {
