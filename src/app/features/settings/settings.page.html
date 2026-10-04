@@ -1,0 +1,45 @@
+<app-page-header [heading]="i18n.t('settings.title')" [subtitle]="i18n.t('settings.subtitle')">
+  <button id="settings-reset" class="button" type="button" (click)="settings.reset()">
+    {{ i18n.t('settings.reset') }}
+  </button>
+</app-page-header>
+
+<section class="panel card" data-animate="fade-up">
+  <label class="row" for="settings-theme">
+    <span>{{ i18n.t('settings.theme') }}</span>
+    <select
+      id="settings-theme"
+      [value]="theme.theme()"
+      (change)="onTheme($any($event.target).value)"
+    >
+      @for (t of themes; track t) {
+        <option [value]="t">
+          {{ i18n.t(t === 'oled' ? 'settings.theme.oled' : 'settings.theme.light') }}
+        </option>
+      }
+    </select>
+  </label>
+
+  <label class="row" for="settings-language">
+    <span>{{ i18n.t('settings.language') }}</span>
+    <select
+      id="settings-language"
+      [value]="i18n.language()"
+      (change)="onLanguage($any($event.target).value)"
+    >
+      @for (l of languages; track l.code) {
+        <option [value]="l.code">{{ l.label }}</option>
+      }
+    </select>
+  </label>
+
+  <label class="row" for="settings-motion">
+    <span>{{ i18n.t('settings.reducedMotion') }}</span>
+    <input
+      id="settings-motion"
+      type="checkbox"
+      [checked]="settings.settings().reducedMotion"
+      (change)="settings.update({ reducedMotion: $any($event.target).checked })"
+    />
+  </label>
+</section>

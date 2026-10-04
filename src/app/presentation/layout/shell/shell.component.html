@@ -1,0 +1,26 @@
+<div class="shell" [class.drawer-open]="drawerOpen()">
+  <header class="topbar glass">
+    <button
+      id="menu-toggle"
+      class="icon-button"
+      type="button"
+      [attr.aria-label]="i18n.t('nav.menu')"
+      [attr.aria-expanded]="drawerOpen()"
+      aria-controls="app-sidebar"
+      (click)="drawerOpen.set(!drawerOpen())"
+    >
+      <app-icon name="menu" [size]="20" />
+    </button>
+    <span class="topbar-title">{{ i18n.t('app.name') }}</span>
+  </header>
+
+  <aside id="app-sidebar" class="sidebar-host glass">
+    <app-sidebar (navigate)="drawerOpen.set(false)" />
+  </aside>
+
+  <div class="scrim" aria-hidden="true" (click)="drawerOpen.set(false)"></div>
+
+  <main class="content">
+    <router-outlet />
+  </main>
+</div>

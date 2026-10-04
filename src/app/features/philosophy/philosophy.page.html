@@ -1,0 +1,56 @@
+<app-page-header
+  [heading]="i18n.t('philosophy.title')"
+  [subtitle]="i18n.t('philosophy.subtitle')"
+/>
+
+<section class="manifesto card" data-animate="fade-up">
+  <div class="manifesto-header">
+    <span class="manifesto-pill">
+      <app-icon name="compass" [size]="14" />
+      <span>{{ i18n.t('philosophy.manifesto.title') }}</span>
+    </span>
+  </div>
+
+  <div class="manifesto-body">
+    <p class="highlight">Software is easier to understand when it becomes visual.</p>
+
+    <div class="stanzas">
+      <div class="stanza">
+        <span class="muted">Architecture is not memorized.</span>
+        <strong>It is explored.</strong>
+      </div>
+
+      <div class="stanza">
+        <span class="muted">Artificial Intelligence is not only explained.</span>
+        <strong>It is experimented with.</strong>
+      </div>
+
+      <div class="stanza">
+        <span class="muted">Systems are not only documented.</span>
+        <strong>They are drawn.</strong>
+      </div>
+    </div>
+
+    <p class="closing">
+      CASE Visual Lab exists to transform complex engineering concepts into interactive visual
+      experiences that anyone can understand.
+    </p>
+  </div>
+</section>
+
+<section class="beliefs-section" data-animate="fade-up">
+  <h2 class="section-title">
+    <app-icon name="sparkles" [size]="18" />
+    <span>{{ i18n.t('philosophy.beliefs.title') }}</span>
+  </h2>
+
+  <div class="beliefs-grid">
+    @for (belief of beliefs; track belief.title; let i = $index) {
+      <article class="card belief-card" data-animate="fade-up" [style.animation-delay.ms]="i * 50">
+        <span class="belief-index">0{{ i + 1 }}</span>
+        <h3>{{ belief.title }}</h3>
+        <p>{{ belief.description }}</p>
+      </article>
+    }
+  </div>
+</section>

@@ -1,0 +1,124 @@
+.manifesto {
+  display: grid;
+  gap: var(--space-6);
+  max-width: 800px;
+  padding: var(--space-8);
+  border-color: var(--color-border-strong);
+  background:
+    radial-gradient(40rem 20rem at 90% 0%, var(--color-accent-soft), transparent 70%),
+    var(--color-surface);
+
+  &:hover {
+    transform: none;
+  }
+}
+
+.manifesto-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.manifesto-body {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.highlight {
+  font-size: clamp(1.2rem, 1rem + 1vw, 1.5rem);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--color-text);
+  letter-spacing: -0.015em;
+}
+
+.stanzas {
+  display: grid;
+  gap: var(--space-4);
+  padding-left: var(--space-4);
+  border-left: 2px solid var(--color-accent);
+}
+
+.stanza {
+  display: grid;
+  gap: 2px;
+  font-size: var(--text-md);
+  line-height: 1.4;
+
+  .muted {
+    color: var(--color-text-muted);
+  }
+
+  strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+}
+
+.closing {
+  font-size: var(--text-md);
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  max-width: 65ch;
+}
+
+.beliefs-section {
+  display: grid;
+  gap: var(--space-6);
+  margin-top: var(--space-12);
+  max-width: 800px;
+}
+
+.section-title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-text);
+
+  app-icon {
+    color: var(--color-accent);
+  }
+}
+
+.beliefs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
+  gap: var(--space-4);
+}
+
+.belief-card {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-6);
+
+  .belief-index {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-accent);
+    letter-spacing: 0.05em;
+  }
+
+  h3 {
+    font-size: var(--text-md);
+    font-weight: 600;
+    color: var(--color-text);
+    line-height: 1.35;
+  }
+
+  p {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+}

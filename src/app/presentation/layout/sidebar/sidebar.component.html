@@ -1,0 +1,29 @@
+<nav class="sidebar" aria-label="Principal">
+  <a class="brand" routerLink="/dashboard" (click)="navigate.emit()">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <span class="brand-text">
+      <strong>{{ i18n.t('app.name') }}</strong>
+      <small>{{ i18n.t('app.tagline') }}</small>
+    </span>
+  </a>
+
+  @for (group of [primary, secondary]; track $index) {
+    <ul class="nav-group">
+      @for (item of group; track item.path) {
+        <li>
+          <a
+            class="nav-link"
+            [id]="'nav-' + item.path"
+            [routerLink]="'/' + item.path"
+            routerLinkActive="active"
+            ariaCurrentWhenActive="page"
+            (click)="navigate.emit()"
+          >
+            <app-icon [name]="item.icon" />
+            <span>{{ i18n.t(item.label) }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  }
+</nav>
