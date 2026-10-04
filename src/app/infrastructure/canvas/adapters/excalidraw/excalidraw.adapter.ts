@@ -6,21 +6,36 @@ import {
 } from '../../../../domain/canvas/canvas-engine.interface';
 import { CanvasRendererPort } from '../../../../domain/canvas/canvas-renderer.port';
 
-function instrumentLog(step: string, elements: any[]) {
+interface InstrumentableElement {
+  id?: string;
+  type?: string;
+  text?: string;
+  width?: number;
+  height?: number;
+  strokeColor?: string;
+  containerId?: string | null;
+}
+
+function instrumentLog(step: string, elements?: readonly unknown[]) {
   if (!elements) return;
-  const rectangles = elements.filter(e => e.type === 'rectangle').length;
-  const texts = elements.filter(e => e.type === 'text').length;
-  const arrows = elements.filter(e => e.type === 'arrow').length;
-  const textDetails = elements.filter(e => e.type === 'text').map(e => ({
-    id: e.id,
-    text: e.text,
-    width: e.width,
-    height: e.height,
-    strokeColor: e.strokeColor,
-    containerId: e.containerId
-  }));
+  const typedElements = elements as readonly InstrumentableElement[];
+  const rectangles = typedElements.filter((e) => e?.type === 'rectangle').length;
+  const texts = typedElements.filter((e) => e?.type === 'text').length;
+  const arrows = typedElements.filter((e) => e?.type === 'arrow').length;
+  const textDetails = typedElements
+    .filter((e) => e?.type === 'text')
+    .map((e) => ({
+      id: e?.id,
+      text: e?.text,
+      width: e?.width,
+      height: e?.height,
+      strokeColor: e?.strokeColor,
+      containerId: e?.containerId,
+    }));
   console.log(`\n--- [INSTRUMENTATION] ${step} ---`);
-  console.log(`Total: ${elements.length} | Rects: ${rectangles} | Texts: ${texts} | Arrows: ${arrows}`);
+  console.log(
+    `Total: ${typedElements.length} | Rects: ${rectangles} | Texts: ${texts} | Arrows: ${arrows}`,
+  );
   console.log('Texts:', JSON.stringify(textDetails, null, 2));
   console.log('------------------------------------\n');
 }
@@ -133,12 +148,9 @@ export class ExcalidrawAdapter implements CanvasRendererPort {
 
     this.excalidrawModule = ExcalidrawModule;
     const ExcalidrawComponent = ExcalidrawModule.Excalidraw;
-    const sanitizedBeforeMount = sanitizeElements(initialData.elements) as any[];
+    const sanitizedBeforeMount = sanitizeElements(initialData.elements);
     instrumentLog('MOUNT - BEFORE restoreElements', sanitizedBeforeMount);
-    const sanitizedElements = ExcalidrawModule.restoreElements(
-      sanitizedBeforeMount,
-      null,
-    );
+    const sanitizedElements = ExcalidrawModule.restoreElements(sanitizedBeforeMount, null);
     instrumentLog('MOUNT - AFTER restoreElements', sanitizedElements);
 
     const render = () => {
@@ -166,7 +178,7 @@ export class ExcalidrawAdapter implements CanvasRendererPort {
           appState: Record<string, unknown>,
           files: Record<string, unknown>,
         ) => {
-          instrumentLog('onChange (Excalidraw Native)', elements as any[]);
+          instrumentLog('onChange (Excalidraw Native)', elements);
           if (this.onChangeCallback) {
             this.onChangeCallback({
               elements,
@@ -209,10 +221,10 @@ export class ExcalidrawAdapter implements CanvasRendererPort {
 
   updateScene(data: Partial<CanvasSceneData>): void {
     if (!this.api) return;
-    
-    instrumentLog('updateScene - INCOMING', data.elements as any[]);
 
-    const sanitized = data.elements ? (sanitizeElements(data.elements) as any[]) : undefined;
+    instrumentLog('updateScene - INCOMING', data.elements);
+
+    const sanitized = data.elements ? sanitizeElements(data.elements) : undefined;
     if (sanitized) instrumentLog('updateScene - AFTER sanitizeElements', sanitized);
 
     const restored = sanitized
