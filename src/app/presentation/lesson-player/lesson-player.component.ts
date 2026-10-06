@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, Component, inject, Signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  OnInit,
+  Signal,
+  untracked,
+} from '@angular/core';
 import { OrchestratorFacadeService } from '../../application/orchestrator/orchestrator-facade.service';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { RuntimeHostComponent } from '../runtime/runtime-host.component';
@@ -17,8 +27,11 @@ import { InspectorPanelComponent } from '../inspector/inspector-panel.component'
   styleUrl: './lesson-player.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LessonPlayerComponent {
+export class LessonPlayerComponent implements OnInit {
   readonly facade = inject(OrchestratorFacadeService);
+  readonly slug = input<string>();
+
+  private _lastLoadedSlug = '';
 
   readonly runtimeState: Signal<string> = this.facade.runtimeState;
   readonly playState: Signal<string> = this.facade.playState;
@@ -30,6 +43,38 @@ export class LessonPlayerComponent {
   readonly isPaused: Signal<boolean> = this.facade.isPaused;
   readonly isLoading: Signal<boolean> = this.facade.isLoading;
   readonly lastError: Signal<string | null> = this.facade.lastError;
+
+  readonly experienceTitle: Signal<string> = computed(() => {
+    return this.facade.experienceTitle
+      ? this.facade.experienceTitle()
+      : 'CASE Visual Lab Experience';
+  });
+
+  constructor() {
+    effect(() => {
+      const s = this.slug();
+      if (s && s !== this._lastLoadedSlug) {
+        this._lastLoadedSlug = s;
+        const uri = s.startsWith('lessons/') || s.endsWith('.json') ? s : `lessons/${s}`;
+        untracked(() => {
+          void this.load(uri).catch(() => void 0);
+        });
+      }
+    });
+  }
+
+  async ngOnInit(): Promise<void> {
+    const s = this.slug();
+    if (s && s !== this._lastLoadedSlug && !this.isReady()) {
+      this._lastLoadedSlug = s;
+      try {
+        const uri = s.startsWith('lessons/') || s.endsWith('.json') ? s : `lessons/${s}`;
+        await this.load(uri);
+      } catch {
+        void 0;
+      }
+    }
+  }
 
   async load(uriOrSlug: string): Promise<void> {
     await this.facade.load(uriOrSlug);

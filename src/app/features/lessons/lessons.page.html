@@ -1,0 +1,47 @@
+<app-page-header [heading]="i18n.t('lessons.title')" [subtitle]="i18n.t('lessons.subtitle')" />
+
+@if (isLoading()) {
+  <div class="lessons-loading" id="lessons-loading" role="status">
+    <div class="loading-spinner"></div>
+    <span class="loading-text">Cargando catálogo de lecciones...</span>
+  </div>
+} @else if (error(); as err) {
+  <div class="lessons-error" id="lessons-error" role="alert">
+    <p>No se pudo cargar el catálogo de lecciones: {{ err }}</p>
+  </div>
+} @else if (lessons().length === 0) {
+  <app-empty-state icon="book" [message]="i18n.t('common.comingSoon')" />
+} @else {
+  <div class="lessons-catalog-grid" id="lessons-catalog-grid" aria-label="Catálogo de Lecciones">
+    @for (lesson of lessons(); track lesson.slug) {
+      <article class="lesson-card" [attr.data-slug]="lesson.slug">
+        <div class="lesson-card-meta">
+          <span class="badge badge-category" id="lesson-category-{{ lesson.slug }}">{{
+            lesson.category
+          }}</span>
+          <span class="badge badge-level" id="lesson-level-{{ lesson.slug }}">{{
+            lesson.level
+          }}</span>
+          <span class="badge badge-duration" id="lesson-duration-{{ lesson.slug }}"
+            >⏱ {{ lesson.estimatedMinutes }} min</span
+          >
+        </div>
+
+        <h3 class="lesson-title" id="lesson-title-{{ lesson.slug }}">{{ lesson.title }}</h3>
+        <p class="lesson-summary" id="lesson-summary-{{ lesson.slug }}">{{ lesson.summary }}</p>
+
+        <div class="lesson-card-actions">
+          <a
+            class="btn-open-lesson"
+            id="btn-open-lesson-{{ lesson.slug }}"
+            [routerLink]="['/lessons', lesson.slug]"
+            [attr.data-action-slug]="lesson.slug"
+            title="Abrir lección {{ lesson.title }}"
+          >
+            Abrir lección →
+          </a>
+        </div>
+      </article>
+    }
+  </div>
+}

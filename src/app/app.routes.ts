@@ -20,6 +20,14 @@ export const routes: Routes = [
         loadComponent: () => import('./features/lessons/lessons.page').then((m) => m.LessonsPage),
       },
       {
+        path: 'lessons/:slug',
+        title: 'Lección · CASE Visual Lab',
+        loadComponent: () =>
+          import('./presentation/lesson-player/lesson-player.component').then(
+            (m) => m.LessonPlayerComponent,
+          ),
+      },
+      {
         path: 'templates',
         title: 'Plantillas · CASE Visual Lab',
         loadComponent: () =>

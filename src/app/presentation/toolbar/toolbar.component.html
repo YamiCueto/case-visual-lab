@@ -1,5 +1,14 @@
 <header class="toolbar-header" aria-label="Experience Control Toolbar">
   <div class="toolbar-brand-section">
+    <button
+      type="button"
+      class="btn-toolbar btn-back-nav"
+      id="toolbar-btn-back"
+      title="Volver a Lecciones"
+      (click)="goBack()"
+    >
+      ← Lecciones
+    </button>
     <span class="experience-title" id="toolbar-experience-title">{{ experienceTitle() }}</span>
     <div class="toolbar-indicators">
       <span class="badge-state" id="toolbar-runtime-state" [attr.data-state]="runtimeState()">

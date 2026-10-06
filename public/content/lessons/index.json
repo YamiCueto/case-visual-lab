@@ -1,0 +1,21 @@
+{
+  "lessons": [
+    {
+      "slug": "01-clean-architecture",
+      "id": "clean-architecture-foundations",
+      "title": "Clean Architecture: La Regla de Dependencia",
+      "summary": "Comprende visualmente por qué las dependencias del código fuente solo pueden apuntar hacia adentro, protegiendo las reglas de negocio del dominio.",
+      "category": "Arquitectura de Software",
+      "level": "Fundamentos",
+      "estimatedMinutes": 8,
+      "tags": [
+        "Clean Architecture",
+        "DDD",
+        "Ports & Adapters",
+        "Dependency Inversion"
+      ],
+      "icon": "layers",
+      "assetUri": "content/lessons/01-clean-architecture.json"
+    }
+  ]
+}

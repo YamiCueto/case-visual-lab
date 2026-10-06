@@ -14,8 +14,8 @@ import { ExperienceContext } from '../../engine/orchestrator/contracts/experienc
 import { RuntimeLifecycleState } from '../../engine/kernel/state-machine/runtime-state-machine.types';
 import { IOrchestratorFacade } from './orchestrator-facade.interface';
 import { OrchestratorFacadeSnapshot } from './orchestrator-facade.types';
+import { BrowserAssetProvider } from '../../infrastructure/assets/browser';
 import {
-  DefaultExperienceAssetProvider,
   HttpRequestFlowBehaviorHandler,
   HttpRequestFlowSimulationProvider,
 } from '../../experiences/http-request-flow';
@@ -39,6 +39,7 @@ export class OrchestratorFacadeService implements IOrchestratorFacade, OnDestroy
   private readonly _activeNode = signal<string>('node_browser');
   private readonly _latencyMs = signal<number>(0);
   private readonly _currentStage = signal<string>('IDLE');
+  private readonly _experienceTitle = signal<string>('CASE Visual Lab Experience');
 
   readonly runtimeState: Signal<RuntimeLifecycleState> = this._runtimeState.asReadonly();
   readonly playState: Signal<string> = this._playState.asReadonly();
@@ -49,6 +50,7 @@ export class OrchestratorFacadeService implements IOrchestratorFacade, OnDestroy
   readonly activeNode: Signal<string> = this._activeNode.asReadonly();
   readonly latencyMs: Signal<number> = this._latencyMs.asReadonly();
   readonly currentStage: Signal<string> = this._currentStage.asReadonly();
+  readonly experienceTitle: Signal<string> = this._experienceTitle.asReadonly();
 
   readonly isReady: Signal<boolean> = computed(() => this._runtimeState() === 'READY');
   readonly isPlaying: Signal<boolean> = computed(
@@ -68,7 +70,7 @@ export class OrchestratorFacadeService implements IOrchestratorFacade, OnDestroy
 
   constructor() {
     const injected = this._injectedContext;
-    const defaultAssetProvider = new DefaultExperienceAssetProvider();
+    const defaultAssetProvider = new BrowserAssetProvider();
     const defaultFlowProvider = new HttpRequestFlowSimulationProvider();
     const defaultFlowHandler = new HttpRequestFlowBehaviorHandler();
 
@@ -205,6 +207,7 @@ export class OrchestratorFacadeService implements IOrchestratorFacade, OnDestroy
       activeNode: this.activeNode(),
       latencyMs: this.latencyMs(),
       currentStage: this.currentStage(),
+      experienceTitle: this.experienceTitle(),
     };
   }
 
@@ -215,6 +218,11 @@ export class OrchestratorFacadeService implements IOrchestratorFacade, OnDestroy
     this._currentTime.set(this._orchestrator.clock.time);
     this._playbackSpeed.set(this._orchestrator.clock.speed);
     this._frameNumber.set(this._orchestrator.session?.frameSequence ?? 0);
+
+    const title = this._orchestrator.context?.manifest?.metadata?.title;
+    if (title) {
+      this._experienceTitle.set(title);
+    }
 
     if (this._orchestrator.simulation.isInitialized()) {
       const vars = this._orchestrator.simulation.state().variables;

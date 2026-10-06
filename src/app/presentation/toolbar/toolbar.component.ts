@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, input, Signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { OrchestratorFacadeService } from '../../application/orchestrator/orchestrator-facade.service';
 
 @Component({
@@ -8,6 +9,7 @@ import { OrchestratorFacadeService } from '../../application/orchestrator/orches
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToolbarComponent {
+  private readonly _router = inject(Router, { optional: true });
   readonly facade = inject(OrchestratorFacadeService);
 
   readonly experienceTitle = input<string>('CASE Visual Lab Experience');
@@ -53,6 +55,12 @@ export class ToolbarComponent {
     const speed = parseFloat(target.value);
     if (!Number.isNaN(speed)) {
       this.setSpeed(speed);
+    }
+  }
+
+  goBack(): void {
+    if (this._router) {
+      void this._router.navigate(['/lessons']);
     }
   }
 }

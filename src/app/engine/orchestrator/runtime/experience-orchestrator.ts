@@ -108,6 +108,10 @@ export class ExperienceOrchestrator implements IExperienceOrchestrator {
     try {
       if (this._stateMachine.currentState() === 'ERROR') {
         this._stateMachine.transition('LOAD', `Reloading experience after error: ${uriOrSlug}`);
+      } else if (this._stateMachine.currentState() !== 'LOAD') {
+        this._clock.stop();
+        this._timeline.stop();
+        this._stateMachine.reset('LOAD');
       }
 
       this.emitEvent('EXPERIENCE_LOADING', { uri: uriOrSlug });

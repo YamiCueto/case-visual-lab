@@ -14,4 +14,5 @@ export interface OrchestratorFacadeSnapshot {
   readonly activeNode?: string;
   readonly latencyMs?: number;
   readonly currentStage?: string;
+  readonly experienceTitle?: string;
 }
