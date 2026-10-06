@@ -1,0 +1,20 @@
+:root {
+  /* Motion Durations */
+  --motion-duration-fast: 120ms; /* Micro-interactions, icon toggles, badges */
+  --motion-duration-normal: 240ms; /* Standard hover, button click, tab switch */
+  --motion-duration-slow: 400ms; /* Panel expand/collapse, modal entry */
+  --motion-duration-cinematic: 800ms; /* Camera panning, timeline scrubber sweeps */
+
+  /* Motion Easing Curves */
+  --motion-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --motion-ease-in: cubic-bezier(0.42, 0, 1, 1);
+  --motion-ease-out: cubic-bezier(0, 0, 0.58, 1);
+  --motion-ease-in-out: cubic-bezier(0.42, 0, 0.58, 1);
+  --motion-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Snappy tactile overshoot */
+  --motion-smooth: cubic-bezier(0.16, 1, 0.3, 1); /* Fluid cinematic deceleration */
+
+  /* Backward Compatibility Aliases */
+  --duration-fast: var(--motion-duration-fast);
+  --duration-base: var(--motion-duration-normal);
+  --ease-out: var(--motion-smooth);
+}

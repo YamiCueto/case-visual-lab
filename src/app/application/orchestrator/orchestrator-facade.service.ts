@@ -14,6 +14,11 @@ import { ExperienceContext } from '../../engine/orchestrator/contracts/experienc
 import { RuntimeLifecycleState } from '../../engine/kernel/state-machine/runtime-state-machine.types';
 import { IOrchestratorFacade } from './orchestrator-facade.interface';
 import { OrchestratorFacadeSnapshot } from './orchestrator-facade.types';
+import {
+  DefaultExperienceAssetProvider,
+  HttpRequestFlowBehaviorHandler,
+  HttpRequestFlowSimulationProvider,
+} from '../../experiences/http-request-flow';
 
 export const ORCHESTRATOR_COMPOSITION_CONTEXT = new InjectionToken<CompositionContext>(
   'ORCHESTRATOR_COMPOSITION_CONTEXT',
@@ -31,6 +36,9 @@ export class OrchestratorFacadeService implements IOrchestratorFacade, OnDestroy
   private readonly _frameNumber = signal<number>(0);
   private readonly _playbackSpeed = signal<number>(1.0);
   private readonly _lastError = signal<string | null>(null);
+  private readonly _activeNode = signal<string>('node_browser');
+  private readonly _latencyMs = signal<number>(0);
+  private readonly _currentStage = signal<string>('IDLE');
 
   readonly runtimeState: Signal<RuntimeLifecycleState> = this._runtimeState.asReadonly();
   readonly playState: Signal<string> = this._playState.asReadonly();
@@ -38,6 +46,9 @@ export class OrchestratorFacadeService implements IOrchestratorFacade, OnDestroy
   readonly frameNumber: Signal<number> = this._frameNumber.asReadonly();
   readonly playbackSpeed: Signal<number> = this._playbackSpeed.asReadonly();
   readonly lastError: Signal<string | null> = this._lastError.asReadonly();
+  readonly activeNode: Signal<string> = this._activeNode.asReadonly();
+  readonly latencyMs: Signal<number> = this._latencyMs.asReadonly();
+  readonly currentStage: Signal<string> = this._currentStage.asReadonly();
 
   readonly isReady: Signal<boolean> = computed(() => this._runtimeState() === 'READY');
   readonly isPlaying: Signal<boolean> = computed(
@@ -56,7 +67,29 @@ export class OrchestratorFacadeService implements IOrchestratorFacade, OnDestroy
   });
 
   constructor() {
-    const platformRuntime = ExperienceCompositionRoot.compose(this._injectedContext ?? undefined);
+    const injected = this._injectedContext;
+    const defaultAssetProvider = new DefaultExperienceAssetProvider();
+    const defaultFlowProvider = new HttpRequestFlowSimulationProvider();
+    const defaultFlowHandler = new HttpRequestFlowBehaviorHandler();
+
+    const customProviders = [...(injected?.customProviders ?? [])];
+    if (!customProviders.some((p) => p.providerId === defaultFlowProvider.providerId)) {
+      customProviders.push(defaultFlowProvider);
+    }
+
+    const customHandlers = [...(injected?.customHandlers ?? [])];
+    if (!customHandlers.some((h) => h.id === defaultFlowHandler.id)) {
+      customHandlers.push(defaultFlowHandler);
+    }
+
+    const mergedContext: CompositionContext = {
+      ...injected,
+      assetProvider: injected?.assetProvider ?? defaultAssetProvider,
+      customProviders,
+      customHandlers,
+    };
+
+    const platformRuntime = ExperienceCompositionRoot.compose(mergedContext);
     this._orchestrator = new ExperienceOrchestrator({ platformRuntime });
     this.syncSignals();
   }
@@ -169,6 +202,9 @@ export class OrchestratorFacadeService implements IOrchestratorFacade, OnDestroy
       isPaused: this.isPaused(),
       isLoading: this.isLoading(),
       lastError: this.lastError(),
+      activeNode: this.activeNode(),
+      latencyMs: this.latencyMs(),
+      currentStage: this.currentStage(),
     };
   }
 
@@ -179,6 +215,13 @@ export class OrchestratorFacadeService implements IOrchestratorFacade, OnDestroy
     this._currentTime.set(this._orchestrator.clock.time);
     this._playbackSpeed.set(this._orchestrator.clock.speed);
     this._frameNumber.set(this._orchestrator.session?.frameSequence ?? 0);
+
+    if (this._orchestrator.simulation.isInitialized()) {
+      const vars = this._orchestrator.simulation.state().variables;
+      this._activeNode.set((vars['activeNode'] as string) ?? 'node_browser');
+      this._latencyMs.set((vars['latencyMs'] as number) ?? 0);
+      this._currentStage.set((vars['currentStage'] as string) ?? 'IDLE');
+    }
 
     if (currentState !== 'ERROR' && this._lastError() !== null) {
       this._lastError.set(null);

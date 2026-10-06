@@ -13,6 +13,9 @@ export interface IOrchestratorFacade {
   readonly isPaused: Signal<boolean>;
   readonly isLoading: Signal<boolean>;
   readonly lastError: Signal<string | null>;
+  readonly activeNode?: Signal<string>;
+  readonly latencyMs?: Signal<number>;
+  readonly currentStage?: Signal<string>;
 
   load(uriOrSlug: string, autoInitialize?: boolean): Promise<ExperienceContext>;
   play(): void;

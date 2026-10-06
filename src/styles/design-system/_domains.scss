@@ -1,0 +1,185 @@
+/* ==========================================================================
+   CASE Visual Lab — Specialized Domain Styles (HTTP, Network, Storage, AI, Timeline)
+   ========================================================================== */
+
+/* HTTP Base & Verbs */
+.cvl-http {
+  color: var(--color-http);
+}
+
+.cvl-http-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-0-5) var(--space-1-5);
+  border-radius: var(--radius-xs);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-wide);
+  line-height: var(--line-height-none);
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+
+.cvl-http-get {
+  background-color: hsl(var(--color-success-hsl) / 0.15);
+  color: var(--color-http-get);
+  border-color: var(--color-http-get);
+}
+
+.cvl-http-post {
+  background-color: hsl(var(--color-info-hsl) / 0.15);
+  color: var(--color-http-post);
+  border-color: var(--color-http-post);
+}
+
+.cvl-http-put {
+  background-color: hsl(var(--color-warning-hsl) / 0.15);
+  color: var(--color-http-put);
+  border-color: var(--color-http-put);
+}
+
+.cvl-http-delete {
+  background-color: hsl(var(--color-error-hsl) / 0.15);
+  color: var(--color-http-delete);
+  border-color: var(--color-http-delete);
+}
+
+.cvl-http-patch {
+  background-color: hsl(285 85% 65% / 0.15);
+  color: var(--color-http-patch);
+  border-color: var(--color-http-patch);
+}
+
+/* Networking Protocols */
+.cvl-network-tcp {
+  background-color: var(--color-tcp-muted);
+  color: var(--color-tcp);
+  border: 1px solid var(--color-tcp);
+  box-shadow: var(--color-tcp-glow);
+}
+
+.cvl-network-tls {
+  background-color: var(--color-tls-muted);
+  color: var(--color-tls);
+  border: 1px solid var(--color-tls);
+  box-shadow: var(--color-tls-glow);
+}
+
+.cvl-network-dns {
+  background-color: var(--color-dns-muted);
+  color: var(--color-dns);
+  border: 1px solid var(--color-dns);
+  box-shadow: var(--color-dns-glow);
+}
+
+/* Storage, Messaging & Queuing */
+.cvl-database {
+  background-color: var(--color-database-muted);
+  color: var(--color-database);
+  border: 1px solid var(--color-database);
+  box-shadow: var(--color-database-glow);
+}
+
+.cvl-cache {
+  background-color: var(--color-cache-muted);
+  color: var(--color-cache);
+  border: 1px solid var(--color-cache);
+  box-shadow: var(--color-cache-glow);
+}
+
+.cvl-queue {
+  background-color: var(--color-queue-muted);
+  color: var(--color-queue);
+  border: 1px solid var(--color-queue);
+  box-shadow: var(--color-queue-glow);
+}
+
+.cvl-broker {
+  background-color: var(--color-broker-muted);
+  color: var(--color-broker);
+  border: 1px solid var(--color-broker);
+  box-shadow: var(--color-broker-glow);
+}
+
+/* AI Ecosystem */
+.cvl-ai {
+  background-color: var(--color-ai-muted);
+  color: var(--color-ai);
+  border: 1px solid var(--color-ai);
+  box-shadow: var(--color-ai-glow);
+}
+
+.cvl-ai-rag {
+  background-color: var(--color-rag-muted);
+  color: var(--color-rag);
+  border: 1px solid var(--color-rag);
+  box-shadow: var(--color-rag-glow);
+}
+
+.cvl-ai-mcp {
+  background-color: var(--color-mcp-muted);
+  color: var(--color-mcp);
+  border: 1px solid var(--color-mcp);
+  box-shadow: var(--color-mcp-glow);
+}
+
+.cvl-ai-tools {
+  background-color: var(--color-tools-muted);
+  color: var(--color-tools);
+  border: 1px solid var(--color-tools);
+  box-shadow: var(--color-tools-glow);
+}
+
+.cvl-ai-agent {
+  background-color: var(--color-agent-muted);
+  color: var(--color-agent);
+  border: 1px solid var(--color-agent);
+  box-shadow: var(--color-agent-glow);
+}
+
+/* Timeline & Telemetry */
+.cvl-timeline-frame {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-0-5) var(--space-2);
+  background-color: var(--color-surface-elevated);
+  border: 1px solid var(--color-timeline);
+  color: var(--color-timeline);
+  border-radius: var(--radius-xs);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-bold);
+}
+
+.cvl-timeline-event {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-0-5) var(--space-2);
+  background-color: hsl(var(--color-timeline-hsl) / 0.15);
+  border: 1px solid var(--color-timeline);
+  color: var(--color-timeline);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-2xs);
+}
+
+/* Status Outcomes */
+.cvl-status-success {
+  background-color: var(--color-success-muted);
+  color: var(--color-success);
+  border-color: var(--color-success);
+}
+
+.cvl-status-warning {
+  background-color: var(--color-warning-muted);
+  color: var(--color-warning);
+  border-color: var(--color-warning);
+}
+
+.cvl-status-error {
+  background-color: var(--color-error-muted);
+  color: var(--color-error);
+  border-color: var(--color-error);
+}

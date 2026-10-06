@@ -50,6 +50,18 @@
         <span class="field-label">Playback Speed:</span>
         <span class="field-value" id="inspector-playback-speed">{{ playbackSpeed() }}x</span>
       </div>
+      <div class="card-field">
+        <span class="field-label">Active Node:</span>
+        <span class="field-value" id="inspector-active-node">{{ activeNode() }}</span>
+      </div>
+      <div class="card-field">
+        <span class="field-label">Current Event:</span>
+        <span class="field-value" id="inspector-current-event">{{ currentStage() }}</span>
+      </div>
+      <div class="card-field">
+        <span class="field-label">Latency:</span>
+        <span class="field-value" id="inspector-latency">{{ latencyMs() }} ms</span>
+      </div>
     </div>
 
     <div class="inspector-card" id="card-flags">

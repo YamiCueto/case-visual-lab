@@ -1,106 +1,199 @@
 .runtime-host-diagnostic-panel {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding: 1.5rem;
-  background-color: var(--color-surface, #1e1e24);
-  color: var(--color-text, #f0f0f5);
-  border-radius: 8px;
-  border: 1px solid var(--color-border, #2d2d38);
-  font-family: monospace;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  background-color: var(--color-bg-subtle);
+  color: var(--color-text-primary);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md);
+  font-family: var(--font-family-mono);
+  position: relative;
+  overflow: hidden;
+}
+
+.runtime-host-diagnostic-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    hsl(var(--color-primary-hsl) / 0.4),
+    transparent
+  );
+  pointer-events: none;
 }
 
 .panel-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid var(--color-border-subtle);
+  padding-bottom: var(--space-3);
 }
 
 .panel-header h2 {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: var(--font-size-base);
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-tight);
+  color: var(--color-text-primary);
 }
 
 .status-indicator {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .status-badge,
 .play-state-badge {
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  background-color: #333344;
-  font-weight: bold;
+  padding: var(--space-0-5) var(--space-2);
+  border-radius: var(--radius-xs);
+  background-color: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-2xs);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.status-badge[data-state='READY'] {
+  color: var(--color-info);
+  border-color: var(--color-info-muted);
+  background-color: var(--color-info-subtle);
+}
+
+.status-badge[data-state='RUNNING'],
+.play-state-badge[data-play-state='PLAYING'] {
+  color: var(--color-success);
+  border-color: var(--color-success-muted);
+  background-color: var(--color-success-subtle);
+}
+
+.play-state-badge[data-play-state='PAUSED'] {
+  color: var(--color-warning);
+  border-color: var(--color-warning-muted);
+  background-color: var(--color-warning-subtle);
 }
 
 .metrics-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 0.75rem;
+  gap: var(--space-3);
 }
 
 .metric-item {
   display: flex;
   flex-direction: column;
-  padding: 0.5rem;
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 4px;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+  transition-property: border-color, background-color;
+  transition-duration: var(--motion-duration-fast);
+  transition-timing-function: var(--motion-smooth);
+}
+
+.metric-item:hover {
+  border-color: var(--color-border);
+  background-color: var(--color-surface-hover);
 }
 
 .metric-label {
-  font-size: 0.75rem;
-  color: #9999aa;
+  font-size: var(--font-size-2xs);
+  color: var(--color-text-muted);
   text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wider);
+  font-weight: var(--font-weight-medium);
 }
 
 .metric-value {
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  letter-spacing: var(--letter-spacing-tight);
 }
 
 .metric-flags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem;
+  gap: var(--space-1);
 }
 
 .flag-badge {
-  padding: 0.125rem 0.375rem;
-  border-radius: 3px;
-  font-size: 0.75rem;
-  background-color: rgba(255, 255, 255, 0.1);
+  padding: var(--space-0-5) var(--space-1-5);
+  border-radius: var(--radius-xs);
+  font-size: var(--font-size-2xs);
+  background-color: var(--color-surface-elevated);
+  border: 1px solid var(--color-border-subtle);
+  color: var(--color-text-muted);
+  transition-property: background-color, border-color, color;
+  transition-duration: var(--motion-duration-fast);
+  transition-timing-function: var(--motion-smooth);
 }
 
 .flag-badge.active {
-  background-color: #10b981;
-  color: #ffffff;
+  background-color: var(--color-success-muted);
+  border-color: var(--color-success);
+  color: var(--color-success);
+  font-weight: var(--font-weight-semibold);
 }
 
 .error-banner {
-  padding: 0.75rem;
-  border-radius: 4px;
-  background-color: rgba(239, 68, 68, 0.2);
-  border: 1px solid #ef4444;
-  color: #fca5a5;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background-color: var(--color-error-muted);
+  border: 1px solid var(--color-error);
+  color: var(--color-error);
+  font-size: var(--font-size-xs);
+  box-shadow: var(--shadow-glow-error);
 }
 
 .panel-controls {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border-subtle);
 }
 
 .panel-controls button {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #444455;
-  background-color: #2a2a38;
-  color: #ffffff;
-  border-radius: 4px;
+  padding: var(--space-1-5) var(--space-3);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  font-family: inherit;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-wide);
+  transition-property: background-color, border-color, color, transform;
+  transition-duration: var(--motion-duration-fast);
+  transition-timing-function: var(--motion-smooth);
 }
 
 .panel-controls button:hover {
-  background-color: #3b3b4f;
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-strong);
+  color: var(--color-text-primary);
+}
+
+.panel-controls button:active {
+  background-color: var(--color-surface-active);
+  transform: scale(0.97);
+}
+
+.panel-controls button:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
 }

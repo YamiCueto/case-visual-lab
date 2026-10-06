@@ -1,0 +1,399 @@
+:root,
+[data-theme='oled'],
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  /* Base HSL Channels - Dark / OLED */
+  --color-bg-hsl: 0 0% 0%;
+  --color-bg-subtle-hsl: 220 20% 4%;
+  --color-surface-hsl: 220 18% 7%;
+  --color-surface-elevated-hsl: 220 18% 11%;
+  --color-glass-hsl: 220 24% 8%;
+
+  /* Background & Surfaces */
+  --color-bg: hsl(var(--color-bg-hsl));
+  --color-bg-subtle: hsl(var(--color-bg-subtle-hsl));
+  --color-surface: hsl(var(--color-surface-hsl));
+  --color-surface-hover: hsl(220 18% 10%);
+  --color-surface-active: hsl(220 18% 13%);
+  --color-surface-strong: hsl(var(--color-surface-elevated-hsl));
+  --color-surface-elevated: hsl(var(--color-surface-elevated-hsl));
+  --color-surface-elevated-hover: hsl(220 18% 14%);
+
+  /* Glass */
+  --color-glass: hsl(var(--color-glass-hsl) / 0.7);
+  --color-glass-border: hsl(0 0% 100% / 0.08);
+
+  /* Borders & Dividers */
+  --color-border: hsl(0 0% 100% / 0.08);
+  --color-border-subtle: hsl(0 0% 100% / 0.04);
+  --color-border-strong: hsl(0 0% 100% / 0.16);
+  --color-border-focus: hsl(var(--color-primary-hsl));
+  --color-divider: hsl(0 0% 100% / 0.06);
+
+  /* Primary (Electric Cyan / Neon Engineering) */
+  --color-primary-hsl: 186 100% 50%;
+  --color-primary: hsl(var(--color-primary-hsl));
+  --color-primary-hover: hsl(186 100% 58%);
+  --color-primary-active: hsl(186 100% 42%);
+  --color-primary-muted: hsl(var(--color-primary-hsl) / 0.14);
+  --color-primary-subtle: hsl(var(--color-primary-hsl) / 0.06);
+  --color-primary-glow: hsl(var(--color-primary-hsl) / 0.35);
+  --color-on-primary: hsl(192 100% 5%);
+
+  /* Secondary (Electric Violet / System Architecture) */
+  --color-secondary-hsl: 255 85% 65%;
+  --color-secondary: hsl(var(--color-secondary-hsl));
+  --color-secondary-hover: hsl(255 85% 72%);
+  --color-secondary-active: hsl(255 85% 58%);
+  --color-secondary-muted: hsl(var(--color-secondary-hsl) / 0.14);
+  --color-secondary-subtle: hsl(var(--color-secondary-hsl) / 0.06);
+  --color-secondary-glow: hsl(var(--color-secondary-hsl) / 0.35);
+  --color-on-secondary: hsl(0 0% 100%);
+
+  /* Success (Emerald / 200 OK / Healthy) */
+  --color-success-hsl: 152 76% 48%;
+  --color-success: hsl(var(--color-success-hsl));
+  --color-success-hover: hsl(152 76% 56%);
+  --color-success-active: hsl(152 76% 40%);
+  --color-success-muted: hsl(var(--color-success-hsl) / 0.14);
+  --color-success-glow: hsl(var(--color-success-hsl) / 0.35);
+  --color-on-success: hsl(155 100% 5%);
+
+  /* Warning (Radiant Amber / Retry / Latency) */
+  --color-warning-hsl: 38 92% 50%;
+  --color-warning: hsl(var(--color-warning-hsl));
+  --color-warning-hover: hsl(38 92% 58%);
+  --color-warning-active: hsl(38 92% 42%);
+  --color-warning-muted: hsl(var(--color-warning-hsl) / 0.14);
+  --color-warning-glow: hsl(var(--color-warning-hsl) / 0.35);
+  --color-on-warning: hsl(35 100% 5%);
+
+  /* Error (Crimson / 500 Failure / Dropped) */
+  --color-error-hsl: 354 84% 57%;
+  --color-error: hsl(var(--color-error-hsl));
+  --color-error-hover: hsl(354 84% 65%);
+  --color-error-active: hsl(354 84% 49%);
+  --color-error-muted: hsl(var(--color-error-hsl) / 0.14);
+  --color-error-glow: hsl(var(--color-error-hsl) / 0.35);
+  --color-on-error: hsl(0 0% 100%);
+
+  /* Info (Azure Sky / Protocols / Discovery) */
+  --color-info-hsl: 210 96% 56%;
+  --color-info: hsl(var(--color-info-hsl));
+  --color-info-hover: hsl(210 96% 64%);
+  --color-info-active: hsl(210 96% 48%);
+  --color-info-muted: hsl(var(--color-info-hsl) / 0.14);
+  --color-info-glow: hsl(var(--color-info-hsl) / 0.35);
+  --color-on-info: hsl(210 100% 5%);
+
+  /* Text Hierarchy */
+  --color-text-primary-hsl: 210 20% 98%;
+  --color-text-primary: hsl(var(--color-text-primary-hsl));
+  --color-text-secondary-hsl: 215 15% 75%;
+  --color-text-secondary: hsl(var(--color-text-secondary-hsl));
+  --color-text-muted-hsl: 215 12% 55%;
+  --color-text-muted: hsl(var(--color-text-muted-hsl));
+  --color-text-inverse-hsl: 222 47% 11%;
+  --color-text-inverse: hsl(var(--color-text-inverse-hsl));
+
+  /* Domain Tokens — Distributed Systems & Visual Lab */
+  /* Timeline */
+  --color-timeline-hsl: 43 96% 56%;
+  --color-timeline: hsl(var(--color-timeline-hsl));
+  --color-timeline-track: hsl(220 16% 14%);
+  --color-timeline-fill: hsl(var(--color-timeline-hsl));
+  --color-timeline-playhead: hsl(var(--color-timeline-hsl));
+  --color-timeline-glow: hsl(var(--color-timeline-hsl) / 0.4);
+
+  /* Network (Packets, TCP/IP, Sockets) */
+  --color-network-hsl: 195 90% 52%;
+  --color-network: hsl(var(--color-network-hsl));
+  --color-network-muted: hsl(var(--color-network-hsl) / 0.15);
+  --color-network-glow: hsl(var(--color-network-hsl) / 0.35);
+
+  /* HTTP (Verbs, Headers, Payload) */
+  --color-http-hsl: 270 80% 64%;
+  --color-http: hsl(var(--color-http-hsl));
+  --color-http-muted: hsl(var(--color-http-hsl) / 0.15);
+  --color-http-glow: hsl(var(--color-http-hsl) / 0.35);
+  --color-http-get: hsl(152 76% 48%);
+  --color-http-post: hsl(195 90% 52%);
+  --color-http-put: hsl(38 92% 50%);
+  --color-http-delete: hsl(354 84% 57%);
+  --color-http-patch: hsl(285 85% 65%);
+
+  /* Protocols & Networking */
+  --color-tcp-hsl: 195 90% 52%;
+  --color-tcp: hsl(var(--color-tcp-hsl));
+  --color-tcp-muted: hsl(var(--color-tcp-hsl) / 0.15);
+  --color-tcp-glow: hsl(var(--color-tcp-hsl) / 0.35);
+
+  --color-tls-hsl: 152 76% 48%;
+  --color-tls: hsl(var(--color-tls-hsl));
+  --color-tls-muted: hsl(var(--color-tls-hsl) / 0.15);
+  --color-tls-glow: hsl(var(--color-tls-hsl) / 0.35);
+
+  --color-dns-hsl: 210 96% 56%;
+  --color-dns: hsl(var(--color-dns-hsl));
+  --color-dns-muted: hsl(var(--color-dns-hsl) / 0.15);
+  --color-dns-glow: hsl(var(--color-dns-hsl) / 0.35);
+
+  /* Database, Cache, Queue, Broker */
+  --color-database-hsl: 160 84% 42%;
+  --color-database: hsl(var(--color-database-hsl));
+  --color-database-muted: hsl(var(--color-database-hsl) / 0.15);
+  --color-database-glow: hsl(var(--color-database-hsl) / 0.35);
+
+  --color-cache-hsl: 175 80% 45%;
+  --color-cache: hsl(var(--color-cache-hsl));
+  --color-cache-muted: hsl(var(--color-cache-hsl) / 0.15);
+  --color-cache-glow: hsl(var(--color-cache-hsl) / 0.35);
+
+  --color-queue-hsl: 280 85% 65%;
+  --color-queue: hsl(var(--color-queue-hsl));
+  --color-queue-muted: hsl(var(--color-queue-hsl) / 0.15);
+  --color-queue-glow: hsl(var(--color-queue-hsl) / 0.35);
+
+  --color-broker-hsl: 25 95% 54%;
+  --color-broker: hsl(var(--color-broker-hsl));
+  --color-broker-muted: hsl(var(--color-broker-hsl) / 0.15);
+  --color-broker-glow: hsl(var(--color-broker-hsl) / 0.35);
+
+  /* AI, RAG, MCP, Tools, Agent */
+  --color-ai-hsl: 320 85% 60%;
+  --color-ai: hsl(var(--color-ai-hsl));
+  --color-ai-muted: hsl(var(--color-ai-hsl) / 0.15);
+  --color-ai-glow: hsl(var(--color-ai-hsl) / 0.35);
+
+  --color-rag-hsl: 260 85% 65%;
+  --color-rag: hsl(var(--color-rag-hsl));
+  --color-rag-muted: hsl(var(--color-rag-hsl) / 0.15);
+  --color-rag-glow: hsl(var(--color-rag-hsl) / 0.35);
+
+  --color-mcp-hsl: 190 100% 50%;
+  --color-mcp: hsl(var(--color-mcp-hsl));
+  --color-mcp-muted: hsl(var(--color-mcp-hsl) / 0.15);
+  --color-mcp-glow: hsl(var(--color-mcp-hsl) / 0.35);
+
+  --color-tools-hsl: 40 95% 55%;
+  --color-tools: hsl(var(--color-tools-hsl));
+  --color-tools-muted: hsl(var(--color-tools-hsl) / 0.15);
+  --color-tools-glow: hsl(var(--color-tools-hsl) / 0.35);
+
+  --color-agent-hsl: 320 85% 60%;
+  --color-agent: hsl(var(--color-agent-hsl));
+  --color-agent-muted: hsl(var(--color-agent-hsl) / 0.15);
+  --color-agent-glow: hsl(var(--color-agent-hsl) / 0.35);
+
+  /* Timeline Sub-Tokens */
+  --color-timeline-frame: hsl(var(--color-timeline-hsl));
+  --color-timeline-event: hsl(195 90% 52%);
+
+  /* Accents & Compatibility Aliases */
+  --color-accent-hsl: var(--color-primary-hsl);
+  --color-accent: hsl(var(--color-accent-hsl));
+  --color-accent-soft: hsl(var(--color-accent-hsl) / 0.12);
+  --color-accent-glow: hsl(var(--color-accent-hsl) / 0.35);
+  --color-on-accent: var(--color-on-primary);
+  --color-text: var(--color-text-primary);
+  --color-text-subtle: var(--color-text-muted);
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+
+  /* Base HSL Channels - Light Mode */
+  --color-bg-hsl: 210 20% 98%;
+  --color-bg-subtle-hsl: 210 20% 95%;
+  --color-surface-hsl: 0 0% 100%;
+  --color-surface-elevated-hsl: 0 0% 100%;
+  --color-glass-hsl: 0 0% 100%;
+
+  /* Background & Surfaces */
+  --color-bg: hsl(var(--color-bg-hsl));
+  --color-bg-subtle: hsl(var(--color-bg-subtle-hsl));
+  --color-surface: hsl(var(--color-surface-hsl));
+  --color-surface-hover: hsl(210 20% 96%);
+  --color-surface-active: hsl(210 20% 93%);
+  --color-surface-strong: hsl(var(--color-surface-elevated-hsl));
+  --color-surface-elevated: hsl(var(--color-surface-elevated-hsl));
+  --color-surface-elevated-hover: hsl(210 20% 97%);
+
+  /* Glass */
+  --color-glass: hsl(var(--color-glass-hsl) / 0.75);
+  --color-glass-border: hsl(215 16% 47% / 0.12);
+
+  /* Borders & Dividers */
+  --color-border-hsl: 214 32% 91%;
+  --color-border: hsl(var(--color-border-hsl));
+  --color-border-subtle: hsl(214 32% 95%);
+  --color-border-strong: hsl(215 25% 82%);
+  --color-border-focus: hsl(var(--color-primary-hsl));
+  --color-divider: hsl(214 32% 91% / 0.8);
+
+  /* Primary (Technical Teal - Light Mode High Contrast) */
+  --color-primary-hsl: 192 95% 36%;
+  --color-primary: hsl(var(--color-primary-hsl));
+  --color-primary-hover: hsl(192 95% 30%);
+  --color-primary-active: hsl(192 95% 24%);
+  --color-primary-muted: hsl(var(--color-primary-hsl) / 0.1);
+  --color-primary-subtle: hsl(var(--color-primary-hsl) / 0.05);
+  --color-primary-glow: hsl(var(--color-primary-hsl) / 0.25);
+  --color-on-primary: hsl(0 0% 100%);
+
+  /* Secondary */
+  --color-secondary-hsl: 255 70% 55%;
+  --color-secondary: hsl(var(--color-secondary-hsl));
+  --color-secondary-hover: hsl(255 70% 48%);
+  --color-secondary-active: hsl(255 70% 42%);
+  --color-secondary-muted: hsl(var(--color-secondary-hsl) / 0.1);
+  --color-secondary-subtle: hsl(var(--color-secondary-hsl) / 0.05);
+  --color-secondary-glow: hsl(var(--color-secondary-hsl) / 0.25);
+  --color-on-secondary: hsl(0 0% 100%);
+
+  /* Success */
+  --color-success-hsl: 152 75% 34%;
+  --color-success: hsl(var(--color-success-hsl));
+  --color-success-hover: hsl(152 75% 28%);
+  --color-success-active: hsl(152 75% 22%);
+  --color-success-muted: hsl(var(--color-success-hsl) / 0.1);
+  --color-success-glow: hsl(var(--color-success-hsl) / 0.25);
+  --color-on-success: hsl(0 0% 100%);
+
+  /* Warning */
+  --color-warning-hsl: 38 92% 38%;
+  --color-warning: hsl(var(--color-warning-hsl));
+  --color-warning-hover: hsl(38 92% 32%);
+  --color-warning-active: hsl(38 92% 26%);
+  --color-warning-muted: hsl(var(--color-warning-hsl) / 0.1);
+  --color-warning-glow: hsl(var(--color-warning-hsl) / 0.25);
+  --color-on-warning: hsl(0 0% 100%);
+
+  /* Error */
+  --color-error-hsl: 354 80% 46%;
+  --color-error: hsl(var(--color-error-hsl));
+  --color-error-hover: hsl(354 80% 40%);
+  --color-error-active: hsl(354 80% 34%);
+  --color-error-muted: hsl(var(--color-error-hsl) / 0.1);
+  --color-error-glow: hsl(var(--color-error-hsl) / 0.25);
+  --color-on-error: hsl(0 0% 100%);
+
+  /* Info */
+  --color-info-hsl: 210 90% 45%;
+  --color-info: hsl(var(--color-info-hsl));
+  --color-info-hover: hsl(210 90% 38%);
+  --color-info-active: hsl(210 90% 32%);
+  --color-info-muted: hsl(var(--color-info-hsl) / 0.1);
+  --color-info-glow: hsl(var(--color-info-hsl) / 0.25);
+  --color-on-info: hsl(0 0% 100%);
+
+  /* Text Hierarchy */
+  --color-text-primary-hsl: 222 47% 11%;
+  --color-text-primary: hsl(var(--color-text-primary-hsl));
+  --color-text-secondary-hsl: 215 25% 27%;
+  --color-text-secondary: hsl(var(--color-text-secondary-hsl));
+  --color-text-muted-hsl: 215 16% 47%;
+  --color-text-muted: hsl(var(--color-text-muted-hsl));
+  --color-text-inverse-hsl: 210 20% 98%;
+  --color-text-inverse: hsl(var(--color-text-inverse-hsl));
+
+  /* Domain Tokens */
+  --color-timeline-hsl: 38 92% 38%;
+  --color-timeline: hsl(var(--color-timeline-hsl));
+  --color-timeline-track: hsl(214 32% 91%);
+  --color-timeline-fill: hsl(var(--color-timeline-hsl));
+  --color-timeline-playhead: hsl(var(--color-timeline-hsl));
+  --color-timeline-glow: hsl(var(--color-timeline-hsl) / 0.3);
+
+  --color-network-hsl: 195 90% 36%;
+  --color-network: hsl(var(--color-network-hsl));
+  --color-network-muted: hsl(var(--color-network-hsl) / 0.1);
+  --color-network-glow: hsl(var(--color-network-hsl) / 0.25);
+
+  --color-http-hsl: 270 70% 50%;
+  --color-http: hsl(var(--color-http-hsl));
+  --color-http-muted: hsl(var(--color-http-hsl) / 0.1);
+  --color-http-glow: hsl(var(--color-http-hsl) / 0.25);
+  --color-http-get: hsl(152 75% 34%);
+  --color-http-post: hsl(195 90% 36%);
+  --color-http-put: hsl(38 92% 38%);
+  --color-http-delete: hsl(354 80% 46%);
+  --color-http-patch: hsl(285 75% 45%);
+
+  /* Protocols & Networking */
+  --color-tcp-hsl: 195 90% 36%;
+  --color-tcp: hsl(var(--color-tcp-hsl));
+  --color-tcp-muted: hsl(var(--color-tcp-hsl) / 0.1);
+  --color-tcp-glow: hsl(var(--color-tcp-hsl) / 0.25);
+
+  --color-tls-hsl: 152 75% 34%;
+  --color-tls: hsl(var(--color-tls-hsl));
+  --color-tls-muted: hsl(var(--color-tls-hsl) / 0.1);
+  --color-tls-glow: hsl(var(--color-tls-hsl) / 0.25);
+
+  --color-dns-hsl: 210 90% 45%;
+  --color-dns: hsl(var(--color-dns-hsl));
+  --color-dns-muted: hsl(var(--color-dns-hsl) / 0.1);
+  --color-dns-glow: hsl(var(--color-dns-hsl) / 0.25);
+
+  /* Database, Cache, Queue, Broker */
+  --color-database-hsl: 160 84% 32%;
+  --color-database: hsl(var(--color-database-hsl));
+  --color-database-muted: hsl(var(--color-database-hsl) / 0.1);
+  --color-database-glow: hsl(var(--color-database-hsl) / 0.25);
+
+  --color-cache-hsl: 175 80% 35%;
+  --color-cache: hsl(var(--color-cache-hsl));
+  --color-cache-muted: hsl(var(--color-cache-hsl) / 0.1);
+  --color-cache-glow: hsl(var(--color-cache-hsl) / 0.25);
+
+  --color-queue-hsl: 280 75% 45%;
+  --color-queue: hsl(var(--color-queue-hsl));
+  --color-queue-muted: hsl(var(--color-queue-hsl) / 0.1);
+  --color-queue-glow: hsl(var(--color-queue-hsl) / 0.25);
+
+  --color-broker-hsl: 25 90% 45%;
+  --color-broker: hsl(var(--color-broker-hsl));
+  --color-broker-muted: hsl(var(--color-broker-hsl) / 0.1);
+  --color-broker-glow: hsl(var(--color-broker-hsl) / 0.25);
+
+  /* AI, RAG, MCP, Tools, Agent */
+  --color-ai-hsl: 320 80% 48%;
+  --color-ai: hsl(var(--color-ai-hsl));
+  --color-ai-muted: hsl(var(--color-ai-hsl) / 0.1);
+  --color-ai-glow: hsl(var(--color-ai-hsl) / 0.25);
+
+  --color-rag-hsl: 260 75% 48%;
+  --color-rag: hsl(var(--color-rag-hsl));
+  --color-rag-muted: hsl(var(--color-rag-hsl) / 0.1);
+  --color-rag-glow: hsl(var(--color-rag-hsl) / 0.25);
+
+  --color-mcp-hsl: 190 95% 36%;
+  --color-mcp: hsl(var(--color-mcp-hsl));
+  --color-mcp-muted: hsl(var(--color-mcp-hsl) / 0.1);
+  --color-mcp-glow: hsl(var(--color-mcp-hsl) / 0.25);
+
+  --color-tools-hsl: 40 90% 42%;
+  --color-tools: hsl(var(--color-tools-hsl));
+  --color-tools-muted: hsl(var(--color-tools-hsl) / 0.1);
+  --color-tools-glow: hsl(var(--color-tools-hsl) / 0.25);
+
+  --color-agent-hsl: 320 80% 48%;
+  --color-agent: hsl(var(--color-agent-hsl));
+  --color-agent-muted: hsl(var(--color-agent-hsl) / 0.1);
+  --color-agent-glow: hsl(var(--color-agent-hsl) / 0.25);
+
+  /* Timeline Sub-Tokens */
+  --color-timeline-frame: hsl(var(--color-timeline-hsl));
+  --color-timeline-event: hsl(195 90% 36%);
+
+  /* Accents & Compatibility Aliases */
+  --color-accent-hsl: var(--color-primary-hsl);
+  --color-accent: hsl(var(--color-accent-hsl));
+  --color-accent-soft: hsl(var(--color-accent-hsl) / 0.1);
+  --color-accent-glow: hsl(var(--color-accent-hsl) / 0.25);
+  --color-on-accent: var(--color-on-primary);
+  --color-text: var(--color-text-primary);
+  --color-text-subtle: var(--color-text-muted);
+}

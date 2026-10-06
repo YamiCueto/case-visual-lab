@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, Signal } from '@angular/core';
 import { OrchestratorFacadeService } from '../../application/orchestrator/orchestrator-facade.service';
 import { OrchestratorFacadeSnapshot } from '../../application/orchestrator/orchestrator-facade.types';
 
@@ -21,6 +21,9 @@ export class InspectorPanelComponent {
   readonly isPaused: Signal<boolean> = this.facade.isPaused;
   readonly isLoading: Signal<boolean> = this.facade.isLoading;
   readonly lastError: Signal<string | null> = this.facade.lastError;
+  readonly activeNode: Signal<string> = this.facade.activeNode ?? signal('node_browser');
+  readonly latencyMs: Signal<number> = this.facade.latencyMs ?? signal(0);
+  readonly currentStage: Signal<string> = this.facade.currentStage ?? signal('IDLE');
 
   getSnapshot(): OrchestratorFacadeSnapshot {
     return this.facade.getSnapshot();

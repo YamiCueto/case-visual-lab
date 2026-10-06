@@ -11,4 +11,7 @@ export interface OrchestratorFacadeSnapshot {
   readonly isPaused: boolean;
   readonly isLoading: boolean;
   readonly lastError: string | null;
+  readonly activeNode?: string;
+  readonly latencyMs?: number;
+  readonly currentStage?: string;
 }

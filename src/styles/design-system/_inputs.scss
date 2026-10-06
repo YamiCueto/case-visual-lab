@@ -1,0 +1,140 @@
+/* ==========================================================================
+   CASE Visual Lab — Inputs, Selects, Range & Toggles Design System
+   ========================================================================== */
+
+.cvl-input {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+  transition-property: border-color, box-shadow, background-color;
+  transition-duration: var(--motion-duration-fast);
+  transition-timing-function: var(--motion-smooth);
+}
+
+.cvl-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.cvl-input:hover:not(:disabled) {
+  border-color: var(--color-border-strong);
+}
+
+.cvl-input:focus {
+  outline: none;
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 1px var(--color-border-focus);
+}
+
+.cvl-input:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.cvl-select {
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-xs);
+  cursor: pointer;
+  transition-property: border-color, box-shadow;
+  transition-duration: var(--motion-duration-fast);
+  transition-timing-function: var(--motion-smooth);
+}
+
+.cvl-select:focus {
+  outline: none;
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 1px var(--color-border-focus);
+}
+
+/* Range Scrubber */
+.cvl-range {
+  width: 100%;
+  height: var(--space-2);
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  margin: 0;
+}
+
+.cvl-range:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+.cvl-range::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: var(--space-4);
+  height: var(--space-4);
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  border: 2px solid var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition-property: transform;
+  transition-duration: var(--motion-duration-fast);
+  transition-timing-function: var(--motion-smooth);
+}
+
+.cvl-range::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Toggle Switch */
+.cvl-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+  user-select: none;
+}
+
+.cvl-toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: var(--space-8);
+  height: var(--space-4);
+  background-color: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  transition-property: background-color, border-color;
+  transition-duration: var(--motion-duration-fast);
+  transition-timing-function: var(--motion-smooth);
+}
+
+.cvl-toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: calc(var(--space-0-5) * 0.5);
+  left: calc(var(--space-0-5) * 0.5);
+  width: calc(var(--space-4) - var(--space-1));
+  height: calc(var(--space-4) - var(--space-1));
+  border-radius: var(--radius-full);
+  background-color: var(--color-text-secondary);
+  transition-property: transform, background-color;
+  transition-duration: var(--motion-duration-fast);
+  transition-timing-function: var(--motion-spring);
+}
+
+.cvl-toggle.is-checked .cvl-toggle-switch {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.cvl-toggle.is-checked .cvl-toggle-switch::after {
+  transform: translateX(calc(var(--space-4) * 0.9));
+  background-color: var(--color-on-primary);
+}

@@ -25,6 +25,7 @@ import { IExperienceOrchestrator } from '../contracts/experience-orchestrator.in
 import { OrchestratorContext } from '../contracts/orchestrator-context.interface';
 import { OrchestratorOptions } from '../contracts/orchestrator-options.interface';
 import { OrchestratorError } from '../contracts/orchestrator-state.types';
+import { PlatformRuntime } from '../../kernel/composition/composition-context.interface';
 import { RuntimeContext } from '../contracts/runtime-context.interface';
 import { FaultIsolator } from '../supervisor/fault-isolator';
 
@@ -42,6 +43,7 @@ export class ExperienceOrchestrator implements IExperienceOrchestrator {
   private readonly _pauseBarrier: PauseBarrier;
   private readonly _seekBarrier: SeekBarrier;
   private readonly _defaultDeltaTimeMs: number;
+  private readonly _platformRuntime?: PlatformRuntime;
 
   private _context: ExperienceContext | null = null;
   private _session: ExecutionSession | null = null;
@@ -51,6 +53,7 @@ export class ExperienceOrchestrator implements IExperienceOrchestrator {
 
   constructor(options?: OrchestratorContext & OrchestratorOptions) {
     const runtime = options?.platformRuntime;
+    this._platformRuntime = runtime;
 
     this._clock = options?.clock ?? runtime?.clock ?? new VirtualClock();
     this._eventBus = options?.eventBus ?? runtime?.eventBus ?? new RuntimeEventBus();
@@ -211,6 +214,18 @@ export class ExperienceOrchestrator implements IExperienceOrchestrator {
           }));
         }
         this._timeline.load(tracks, markers);
+      }
+
+      if (descriptor.manifest.simulation) {
+        const providerId = descriptor.manifest.simulation.provider;
+        const provider = this._platformRuntime?.getSimulationProvider(providerId);
+        if (provider) {
+          const scenario =
+            descriptor.manifest.simulation.scenario ??
+            descriptor.manifest.simulation.initialVariables ??
+            {};
+          this._simulation.initialize(provider, scenario);
+        }
       }
 
       if (autoInitialize) {

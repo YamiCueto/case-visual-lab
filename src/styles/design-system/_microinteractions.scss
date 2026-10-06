@@ -1,0 +1,40 @@
+/* ==========================================================================
+   CASE Visual Lab — Microinteractions & Component States
+   ========================================================================== */
+
+/* Generic Interactive Element Baseline */
+.cvl-interactive {
+  transition-property: background-color, border-color, color, box-shadow, transform, opacity;
+  transition-duration: var(--motion-duration-fast);
+  transition-timing-function: var(--motion-smooth);
+}
+
+.cvl-interactive:hover:not(:disabled):not(.is-disabled) {
+  transform: translateY(calc(var(--space-0-5) * -0.5));
+}
+
+.cvl-interactive:active:not(:disabled):not(.is-disabled),
+.cvl-interactive.is-pressed {
+  transform: scale(0.98);
+  transition-timing-function: var(--motion-spring);
+}
+
+.cvl-interactive:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+.cvl-interactive.is-disabled,
+.cvl-interactive:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none;
+}
+
+.cvl-interactive.is-selected,
+.cvl-interactive.is-active {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-muted);
+  color: var(--color-primary);
+}

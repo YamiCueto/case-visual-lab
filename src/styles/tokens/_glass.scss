@@ -1,0 +1,33 @@
+:root,
+[data-theme='oled'],
+[data-theme='dark'] {
+  /* Glassmorphism Blur Scales */
+  --glass-blur-sm: 8px;
+  --glass-blur-md: 16px;
+  --glass-blur-lg: 24px;
+  --glass-blur-xl: 36px;
+
+  /* Glass Opacity */
+  --glass-opacity-subtle: 0.45;
+  --glass-opacity-medium: 0.7;
+  --glass-opacity-dense: 0.88;
+
+  /* Glass Surface Tokens */
+  --glass-bg: hsl(var(--color-glass-hsl) / var(--glass-opacity-medium));
+  --glass-bg-subtle: hsl(var(--color-glass-hsl) / var(--glass-opacity-subtle));
+  --glass-bg-dense: hsl(var(--color-glass-hsl) / var(--glass-opacity-dense));
+  --glass-blur: var(--glass-blur-md);
+  --glass-border: hsl(0 0% 100% / 0.08);
+  --glass-backdrop: blur(var(--glass-blur-md)) saturate(140%);
+  --glass-backdrop-dense: blur(var(--glass-blur-lg)) saturate(160%);
+}
+
+[data-theme='light'] {
+  --glass-bg: hsl(var(--color-glass-hsl) / 0.75);
+  --glass-bg-subtle: hsl(var(--color-glass-hsl) / 0.5);
+  --glass-bg-dense: hsl(var(--color-glass-hsl) / 0.9);
+  --glass-blur: var(--glass-blur-md);
+  --glass-border: hsl(215 16% 47% / 0.12);
+  --glass-backdrop: blur(var(--glass-blur-md)) saturate(140%);
+  --glass-backdrop-dense: blur(var(--glass-blur-lg)) saturate(160%);
+}

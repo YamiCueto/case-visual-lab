@@ -1,0 +1,180 @@
+/* ==========================================================================
+   CASE Visual Lab — Feedback, Metrics, Overlays & Layout Elements
+   ========================================================================== */
+
+/* Divider */
+.cvl-divider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-divider);
+  border: none;
+  margin: var(--space-2) 0;
+}
+
+/* Section Title */
+.cvl-section-title {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* Metric Display */
+.cvl-metric {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.cvl-metric-label {
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.cvl-metric-value {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+/* Property Row */
+.cvl-property-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-1) 0;
+  border-bottom: 1px solid var(--color-divider);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+}
+
+.cvl-property-row:last-child {
+  border-bottom: none;
+}
+
+.cvl-property-label {
+  color: var(--color-text-muted);
+}
+
+.cvl-property-value {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+/* Spinner */
+.cvl-spinner {
+  display: inline-block;
+  width: var(--space-4);
+  height: var(--space-4);
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: var(--radius-full);
+}
+
+/* Skeleton Loading Placeholder */
+.cvl-skeleton {
+  display: block;
+  width: 100%;
+  height: var(--space-4);
+  background-color: var(--color-surface-hover);
+  border-radius: var(--radius-xs);
+}
+
+/* Empty State */
+.cvl-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-8);
+  gap: var(--space-3);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  color: var(--color-text-muted);
+}
+
+.cvl-empty-state-title {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+}
+
+.cvl-empty-state-description {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  max-width: calc(var(--sidebar-width) * 1.5);
+}
+
+/* Overlay & Modals */
+.cvl-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: hsl(var(--color-bg-hsl) / var(--glass-opacity-dense));
+  backdrop-filter: var(--glass-backdrop);
+  -webkit-backdrop-filter: var(--glass-backdrop);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal);
+  padding: var(--space-4);
+}
+
+.cvl-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: calc(var(--sidebar-width) * 2);
+  width: 100%;
+  padding: var(--space-6);
+  background-color: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  color: var(--color-text-primary);
+}
+
+/* Toast Notification */
+.cvl-toast {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-xs);
+  z-index: var(--z-toast);
+}
+
+/* Tooltip */
+.cvl-tooltip {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-2);
+  background-color: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xs);
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-2xs);
+  box-shadow: var(--shadow-sm);
+  z-index: var(--z-tooltip);
+  pointer-events: none;
+}

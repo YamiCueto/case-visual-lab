@@ -1,0 +1,15 @@
+:root {
+  /* Documented Z-Index Layer Scale */
+  --z-deep: -1; /* Deep background grid, starfield, canvas patterns */
+  --z-canvas: 0; /* Primary render canvases (Excalidraw, Three.js) */
+  --z-canvas-overlay: 10; /* Spatial HUD overlays, node anchor pins, scene badges */
+  --z-surface: 20; /* Default layout panels, sidebar panes, cards */
+  --z-dock: 30; /* Persistent bottom timeline and transport dock */
+  --z-toolbar: 40; /* Top application toolbar and persistent controls */
+  --z-inspector: 50; /* Side inspector drawer, telemetry panes */
+  --z-popover: 100; /* Floating dropdowns, speed menus, context overlays */
+  --z-tooltip: 150; /* Fast informational hover tooltips */
+  --z-modal: 200; /* Modal dialog backdrops and centered dialogs */
+  --z-toast: 300; /* Toast notifications, alert badges */
+  --z-priority: 999; /* Fullscreen emergency overlays, debug panels */
+}
