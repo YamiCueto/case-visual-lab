@@ -4,7 +4,8 @@
   </div>
 
   <main class="shell-viewport" id="shell-viewport" aria-label="Main Viewport Canvas">
-    <app-runtime-host />
+    <app-lesson-content [manifest]="facade.experienceManifest()" />
+    <app-runtime-host class="diagnostic-host" />
   </main>
 
   <aside class="shell-inspector" id="shell-inspector" aria-label="Runtime Inspector Panel">
@@ -12,7 +13,7 @@
   </aside>
 
   <footer class="shell-timeline" id="shell-timeline" aria-label="Timeline Scrubber and Controls">
-    <app-timeline-panel />
+    <app-timeline-panel [durationMs]="timelineDuration()" />
   </footer>
 
   <div class="shell-overlay-layer" id="layer-overlays" aria-label="Overlay Layer">

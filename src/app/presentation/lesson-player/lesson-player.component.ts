@@ -5,6 +5,7 @@ import {
   effect,
   inject,
   input,
+  OnDestroy,
   OnInit,
   Signal,
   untracked,
@@ -14,11 +15,13 @@ import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { RuntimeHostComponent } from '../runtime/runtime-host.component';
 import { TimelinePanelComponent } from '../timeline/timeline-panel.component';
 import { InspectorPanelComponent } from '../inspector/inspector-panel.component';
+import { LessonContentComponent } from '../lesson-content/lesson-content.component';
 
 @Component({
   selector: 'app-lesson-player',
   imports: [
     ToolbarComponent,
+    LessonContentComponent,
     RuntimeHostComponent,
     TimelinePanelComponent,
     InspectorPanelComponent,
@@ -27,11 +30,13 @@ import { InspectorPanelComponent } from '../inspector/inspector-panel.component'
   styleUrl: './lesson-player.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LessonPlayerComponent implements OnInit {
+export class LessonPlayerComponent implements OnInit, OnDestroy {
   readonly facade = inject(OrchestratorFacadeService);
   readonly slug = input<string>();
 
   private _lastLoadedSlug = '';
+  private _animFrameId: number | null = null;
+  private _lastFrameTime = 0;
 
   readonly runtimeState: Signal<string> = this.facade.runtimeState;
   readonly playState: Signal<string> = this.facade.playState;
@@ -50,6 +55,10 @@ export class LessonPlayerComponent implements OnInit {
       : 'CASE Visual Lab Experience';
   });
 
+  readonly timelineDuration: Signal<number> = computed(() => {
+    return this.facade.experienceManifest()?.timeline?.durationMs ?? 10000;
+  });
+
   constructor() {
     effect(() => {
       const s = this.slug();
@@ -59,6 +68,15 @@ export class LessonPlayerComponent implements OnInit {
         untracked(() => {
           void this.load(uri).catch(() => void 0);
         });
+      }
+    });
+
+    effect(() => {
+      const isPlaying = this.facade.isPlaying();
+      if (isPlaying) {
+        this.startPlaybackLoop();
+      } else {
+        this.stopPlaybackLoop();
       }
     });
   }
@@ -80,11 +98,16 @@ export class LessonPlayerComponent implements OnInit {
     await this.facade.load(uriOrSlug);
   }
 
+  ngOnDestroy(): void {
+    this.stopPlaybackLoop();
+  }
+
   play(): void {
     this.facade.play();
   }
 
   pause(): void {
+    this.stopPlaybackLoop();
     this.facade.pause();
   }
 
@@ -97,14 +120,48 @@ export class LessonPlayerComponent implements OnInit {
   }
 
   stop(): void {
+    this.stopPlaybackLoop();
     this.facade.stop();
   }
 
   async destroy(): Promise<void> {
+    this.stopPlaybackLoop();
     await this.facade.destroy();
   }
 
   tick(deltaMs?: number): void {
     this.facade.tick(deltaMs);
+  }
+
+  private startPlaybackLoop(): void {
+    if (this._animFrameId !== null || typeof requestAnimationFrame === 'undefined') {
+      return;
+    }
+    this._lastFrameTime = performance.now();
+    const loop = (now: number) => {
+      if (!this.facade.isPlaying()) {
+        this.stopPlaybackLoop();
+        return;
+      }
+      const deltaMs = Math.max(0, now - this._lastFrameTime);
+      this._lastFrameTime = now;
+      if (deltaMs > 0) {
+        this.facade.tick(deltaMs);
+      }
+      const duration = this.timelineDuration();
+      if (duration > 0 && this.facade.currentTime() >= duration) {
+        this.pause();
+        return;
+      }
+      this._animFrameId = requestAnimationFrame(loop);
+    };
+    this._animFrameId = requestAnimationFrame(loop);
+  }
+
+  private stopPlaybackLoop(): void {
+    if (this._animFrameId !== null && typeof cancelAnimationFrame !== 'undefined') {
+      cancelAnimationFrame(this._animFrameId);
+      this._animFrameId = null;
+    }
   }
 }

@@ -374,4 +374,51 @@ describe('Timeline Execution Engine (Parallel Scheduler)', () => {
       expect(() => engine.snapshot()).toThrow(/disposed/);
     });
   });
+
+  describe('Legacy & Trackless Timeline Support', () => {
+    it('should load markers without tracks (empty tracks array)', () => {
+      const engine = new TimelineEngine();
+      const markers: TimelineMarker[] = [
+        { id: 'm1', name: 'Step 1', time: 0, kind: 'CHECKPOINT' },
+        { id: 'm2', name: 'Step 2', time: 4000, kind: 'CHECKPOINT' },
+      ];
+
+      engine.load([], markers);
+
+      expect(engine.tracks()).toHaveLength(0);
+      expect(engine.markers()).toHaveLength(2);
+      expect(engine.duration()).toBe(4000);
+    });
+
+    it('should respect explicit durationMs from manifest', () => {
+      const engine = new TimelineEngine();
+      const markers: TimelineMarker[] = [{ id: 'm1', name: 'Step 1', time: 0, kind: 'CHECKPOINT' }];
+
+      engine.load([], markers, 8000);
+
+      expect(engine.duration()).toBe(8000);
+    });
+
+    it('should clean previous tracks, markers, and execution state on reload', () => {
+      const engine = new TimelineEngine();
+      engine.load(createTestTracks(), [{ id: 'old_m', name: 'Old Marker', time: 50, kind: 'CUE' }]);
+      engine.play();
+      engine.tick(100);
+
+      expect(engine.tracks().length).toBeGreaterThan(0);
+      expect(engine.markers()).toHaveLength(1);
+
+      // Reload with trackless timeline
+      engine.load([], [{ id: 'new_m', name: 'New Marker', time: 200, kind: 'CHECKPOINT' }], 500);
+
+      expect(engine.tracks()).toHaveLength(0);
+      expect(engine.markers()).toHaveLength(1);
+      expect(engine.markers()[0].id).toBe('new_m');
+      expect(engine.duration()).toBe(500);
+      expect(engine.time()).toBe(0);
+      expect(engine.state()).toBe('STOPPED');
+      expect(engine.snapshot().executedFrameIds).toHaveLength(0);
+      expect(engine.snapshot().passedMarkerIds).toHaveLength(0);
+    });
+  });
 });

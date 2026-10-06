@@ -40,6 +40,12 @@ export interface ISimulationRuntime<TScenario = unknown, TProviderState = unknow
   restore(snapshot: SimulationSnapshot<TProviderState>): void;
 
   /**
+   * Resets active simulation session without disposing the runtime.
+   * Cleans provider, state, providerState, snapshots, and marks isInitialized as false.
+   */
+  reset(): void;
+
+  /**
    * Releases resources and tears down active provider.
    */
   dispose(): void;

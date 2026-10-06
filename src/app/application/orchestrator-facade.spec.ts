@@ -219,4 +219,17 @@ describe('OrchestratorFacadeService', () => {
 
     await standalone.destroy();
   });
+
+  it('exposes experienceManifest signal and updates reactively on load', async () => {
+    expect(service.experienceManifest()).toBeNull();
+
+    await service.load('test');
+    const manifest = service.experienceManifest();
+    expect(manifest).not.toBeNull();
+    expect(manifest?.metadata.id).toBe('exp_application_test');
+    expect(manifest?.metadata.title).toBe('Application Layer Test Experience');
+
+    await service.destroy();
+    expect(service.experienceManifest()).toBeNull();
+  });
 });

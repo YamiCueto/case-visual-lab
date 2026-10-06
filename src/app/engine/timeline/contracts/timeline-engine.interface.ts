@@ -22,7 +22,11 @@ export interface ITimelineEngine {
   /**
    * Loads tracks and optional markers into the timeline.
    */
-  load(tracks: readonly TimelineTrackDefinition[], markers?: readonly TimelineMarker[]): void;
+  load(
+    tracks: readonly TimelineTrackDefinition[],
+    markers?: readonly TimelineMarker[],
+    durationMs?: number,
+  ): void;
 
   /**
    * Starts playback from current position.

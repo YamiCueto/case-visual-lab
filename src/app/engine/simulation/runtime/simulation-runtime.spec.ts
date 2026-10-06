@@ -377,4 +377,33 @@ describe('SimulationRuntime (Kernel)', () => {
       expect(() => runtime.dispose()).not.toThrow();
     });
   });
+
+  describe('Reset & Session Lifecycle', () => {
+    it('should cleanly reset active session without destroying runtime for reuse', () => {
+      const runtime = new SimulationRuntime<FakeScenario, FakeProviderState>();
+      const provider = new FakePacketSimulationProvider();
+
+      runtime.initialize(provider, scenario);
+      runtime.step(100);
+      expect(runtime.isInitialized()).toBe(true);
+      expect(runtime.snapshots().length).toBeGreaterThan(0);
+
+      runtime.reset();
+
+      expect(provider.isDisposed).toBe(true);
+      expect(runtime.isDisposed()).toBe(false);
+      expect(runtime.isInitialized()).toBe(false);
+      expect(runtime.activeProvider()).toBeNull();
+      expect(runtime.snapshots()).toEqual([]);
+      expect(runtime.time()).toBe(0);
+
+      // Re-initialization should succeed cleanly
+      const newProvider = new FakePacketSimulationProvider();
+      runtime.initialize(newProvider, { ...scenario, initialPackets: 2 });
+      expect(runtime.isInitialized()).toBe(true);
+      expect(runtime.activeProvider()).toBe(newProvider);
+      expect(runtime.time()).toBe(0);
+      expect(runtime.state().stepIndex).toBe(0);
+    });
+  });
 });

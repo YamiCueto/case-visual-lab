@@ -3,6 +3,7 @@ import { signal, WritableSignal } from '@angular/core';
 import { vi } from 'vitest';
 import { OrchestratorFacadeService } from '../../application/orchestrator/orchestrator-facade.service';
 import { OrchestratorFacadeSnapshot } from '../../application/orchestrator/orchestrator-facade.types';
+import { ExperienceManifest } from '../../engine/assets/contracts/experience-manifest.types';
 import { LessonPlayerComponent } from './lesson-player.component';
 
 class MockOrchestratorFacade {
@@ -16,6 +17,7 @@ class MockOrchestratorFacade {
   readonly isPaused: WritableSignal<boolean> = signal(false);
   readonly isLoading: WritableSignal<boolean> = signal(false);
   readonly lastError: WritableSignal<string | null> = signal(null);
+  readonly experienceManifest: WritableSignal<ExperienceManifest | null> = signal(null);
 
   readonly load = vi.fn().mockImplementation(async () => Promise.resolve());
   readonly play = vi.fn();
@@ -145,5 +147,41 @@ describe('LessonPlayerComponent', () => {
     const el: HTMLElement = fixture.nativeElement.querySelector('.lesson-player-shell');
     expect(el).not.toBeNull();
     expect(el.classList.contains('lesson-player-shell')).toBe(true);
+  });
+
+  it('drives playback tick via animation frames when playing (K)', () => {
+    let capturedCb: ((now: number) => void) | null = null;
+    const rafSpy = vi.spyOn(globalThis, 'requestAnimationFrame').mockImplementation((cb) => {
+      capturedCb = cb;
+      return 1;
+    });
+    const cancelSpy = vi.spyOn(globalThis, 'cancelAnimationFrame');
+
+    mockFacade.isPlaying.set(true);
+    fixture.detectChanges();
+
+    expect(rafSpy).toHaveBeenCalled();
+    expect(capturedCb).not.toBeNull();
+
+    // Invoke captured callback
+    capturedCb!(performance.now() + 16);
+    expect(mockFacade.tick).toHaveBeenCalled();
+
+    // Pause should stop loop
+    mockFacade.isPlaying.set(false);
+    fixture.detectChanges();
+
+    expect(cancelSpy).toHaveBeenCalled();
+    rafSpy.mockRestore();
+    cancelSpy.mockRestore();
+  });
+
+  it('supports reloading a lesson cleanly without error (L)', async () => {
+    await component.load('lessons/01-clean-architecture');
+    expect(mockFacade.load).toHaveBeenCalledWith('lessons/01-clean-architecture');
+
+    // Reload again
+    await component.load('lessons/01-clean-architecture');
+    expect(mockFacade.load).toHaveBeenCalledTimes(2);
   });
 });

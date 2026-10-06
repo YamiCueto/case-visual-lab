@@ -76,12 +76,14 @@ export interface ExperienceNarrativeConfig {
 
 export interface EvaluationCheckpoint {
   readonly id: string;
+  readonly stepNumber?: number;
   readonly criteria?: string;
   readonly hint?: string;
 }
 
 export interface EvaluationQuizQuestion {
   readonly id: string;
+  readonly stepNumber?: number;
   readonly prompt: string;
   readonly options: readonly string[];
   readonly correctIndex: number;

@@ -170,3 +170,7 @@
   width: var(--sidebar-width);
   z-index: var(--z-inspector);
 }
+
+.diagnostic-host {
+  display: none;
+}

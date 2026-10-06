@@ -1,6 +1,7 @@
 import { Signal } from '@angular/core';
 import { RuntimeLifecycleState } from '../../engine/kernel/state-machine/runtime-state-machine.types';
 import { ExperienceContext } from '../../engine/orchestrator/contracts/experience-context.interface';
+import { ExperienceManifest } from '../../engine/assets/contracts/experience-manifest.types';
 
 export interface IOrchestratorFacade {
   readonly runtimeState: Signal<RuntimeLifecycleState>;
@@ -17,6 +18,7 @@ export interface IOrchestratorFacade {
   readonly latencyMs?: Signal<number>;
   readonly currentStage?: Signal<string>;
   readonly experienceTitle?: Signal<string>;
+  readonly experienceManifest: Signal<ExperienceManifest | null>;
 
   load(uriOrSlug: string, autoInitialize?: boolean): Promise<ExperienceContext>;
   play(): void;

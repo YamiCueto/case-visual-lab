@@ -15,6 +15,7 @@ import { RuntimeLifecycleState } from '../../engine/kernel/state-machine/runtime
 import { IOrchestratorFacade } from './orchestrator-facade.interface';
 import { OrchestratorFacadeSnapshot } from './orchestrator-facade.types';
 import { BrowserAssetProvider } from '../../infrastructure/assets/browser';
+import { ExperienceManifest } from '../../engine/assets/contracts/experience-manifest.types';
 import {
   HttpRequestFlowBehaviorHandler,
   HttpRequestFlowSimulationProvider,
@@ -40,6 +41,7 @@ export class OrchestratorFacadeService implements IOrchestratorFacade, OnDestroy
   private readonly _latencyMs = signal<number>(0);
   private readonly _currentStage = signal<string>('IDLE');
   private readonly _experienceTitle = signal<string>('CASE Visual Lab Experience');
+  private readonly _experienceManifest = signal<ExperienceManifest | null>(null);
 
   readonly runtimeState: Signal<RuntimeLifecycleState> = this._runtimeState.asReadonly();
   readonly playState: Signal<string> = this._playState.asReadonly();
@@ -51,6 +53,8 @@ export class OrchestratorFacadeService implements IOrchestratorFacade, OnDestroy
   readonly latencyMs: Signal<number> = this._latencyMs.asReadonly();
   readonly currentStage: Signal<string> = this._currentStage.asReadonly();
   readonly experienceTitle: Signal<string> = this._experienceTitle.asReadonly();
+  readonly experienceManifest: Signal<ExperienceManifest | null> =
+    this._experienceManifest.asReadonly();
 
   readonly isReady: Signal<boolean> = computed(() => this._runtimeState() === 'READY');
   readonly isPlaying: Signal<boolean> = computed(
@@ -219,7 +223,10 @@ export class OrchestratorFacadeService implements IOrchestratorFacade, OnDestroy
     this._playbackSpeed.set(this._orchestrator.clock.speed);
     this._frameNumber.set(this._orchestrator.session?.frameSequence ?? 0);
 
-    const title = this._orchestrator.context?.manifest?.metadata?.title;
+    const manifest = this._orchestrator.context?.manifest ?? null;
+    this._experienceManifest.set(manifest);
+
+    const title = manifest?.metadata?.title;
     if (title) {
       this._experienceTitle.set(title);
     }

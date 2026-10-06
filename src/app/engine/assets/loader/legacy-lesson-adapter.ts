@@ -59,6 +59,7 @@ export class LegacyLessonAdapter {
       if (s.checkpoint) {
         checkpoints.push({
           id: s.checkpoint.id,
+          stepNumber: stepIndex,
           criteria: s.checkpoint.criteria,
           hint: s.checkpoint.hint,
         });
@@ -68,6 +69,7 @@ export class LegacyLessonAdapter {
       if (s.question) {
         quizzes.push({
           id: s.question.id,
+          stepNumber: stepIndex,
           prompt: s.question.prompt,
           options: s.question.options,
           correctIndex: s.question.correctIndex,

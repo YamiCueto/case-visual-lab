@@ -165,6 +165,26 @@ export class SimulationRuntime<
   }
 
   /**
+   * Resets active simulation session without disposing the runtime.
+   * Cleans provider, state, providerState, snapshots, and marks isInitialized as false.
+   */
+  reset(): void {
+    if (this._isDisposed) {
+      return;
+    }
+
+    this._provider?.dispose?.();
+    this._provider = null;
+    this._state = null;
+    this._providerState = null;
+    this._snapshots = [];
+    this._seed = 0;
+    this._sequence = 0;
+    this._currentTimeMs = 0;
+    this._isInitialized = false;
+  }
+
+  /**
    * Releases resources and tears down active provider.
    */
   dispose(): void {

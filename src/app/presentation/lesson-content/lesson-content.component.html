@@ -1,0 +1,157 @@
+<section class="lesson-content-layout" aria-label="Contenido interactivo de la lección">
+  <!-- Barra superior de navegación de pasos -->
+  <header class="lesson-step-navigation" aria-label="Navegación de pasos">
+    <div class="step-nav-controls">
+      <button
+        type="button"
+        id="btn-prev-step"
+        class="nav-btn prev-btn"
+        [disabled]="activeStep() <= 1"
+        (click)="previousStep()"
+        aria-label="Paso anterior"
+      >
+        <span class="btn-icon">←</span> Anterior
+      </button>
+
+      <div class="step-indicator-wrapper" id="step-indicator">
+        <span class="step-badge" id="step-counter">
+          Paso {{ activeStep() }} / {{ totalSteps() }}
+        </span>
+      </div>
+
+      <button
+        type="button"
+        id="btn-next-step"
+        class="nav-btn next-btn"
+        [disabled]="activeStep() >= totalSteps()"
+        (click)="nextStep()"
+        aria-label="Siguiente paso"
+      >
+        Siguiente <span class="btn-icon">→</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Área principal: Escena visual (Excalidraw) + Panel pedagógico -->
+  <div class="lesson-stage-grid">
+    <!-- Visual Canvas Viewport -->
+    <div class="canvas-panel" aria-label="Lienzo de arquitectura visual">
+      <div class="canvas-header">
+        <span class="panel-tag">DIAGRAMA ARQUITECTÓNICO</span>
+        <span class="panel-step-label">Escena Paso {{ activeStep() }}</span>
+      </div>
+      <div class="canvas-mount-wrapper" id="canvas-wrapper">
+        <div #canvasContainer class="canvas-host-container" id="lesson-canvas-container"></div>
+      </div>
+    </div>
+
+    <!-- Pedagogical Narrative & Interactive Evaluation Panel -->
+    <div class="pedagogical-panel" aria-label="Detalles pedagógicos y evaluación">
+      <!-- Título y narrativa -->
+      <article class="narrative-section">
+        <h2 class="step-title" id="step-title">
+          {{ activeNarrative()?.title ?? 'Paso ' + activeStep() }}
+        </h2>
+
+        <div class="step-narrative-body" id="step-narrative">
+          {{ activeNarrative()?.content }}
+        </div>
+      </article>
+
+      <!-- Code Snippet si existe -->
+      @if (activeSnippet(); as snippet) {
+        <section class="snippet-section" id="step-snippet" aria-label="Fragmento de código">
+          <div class="snippet-header">
+            <span class="snippet-filename" id="snippet-filename">{{
+              snippet.filename ?? 'código'
+            }}</span>
+            <span class="snippet-lang-tag">{{ snippet.language ?? 'typescript' }}</span>
+          </div>
+          <pre class="snippet-code-block"><code id="snippet-code">{{ snippet.code }}</code></pre>
+          @if (snippet.explanation) {
+            <p class="snippet-explanation-text" id="snippet-explanation">
+              {{ snippet.explanation }}
+            </p>
+          }
+        </section>
+      }
+
+      <!-- Checkpoint de validación si existe -->
+      @if (activeCheckpoint(); as cp) {
+        <section
+          class="checkpoint-section"
+          id="step-checkpoint"
+          aria-label="Checkpoint de validación"
+        >
+          <header class="card-header">
+            <span class="card-icon">🎯</span>
+            <h3 class="card-heading">Checkpoint de Validación</h3>
+          </header>
+          <div class="card-content">
+            <p class="criteria-text" id="checkpoint-criteria">{{ cp.criteria }}</p>
+            @if (cp.hint) {
+              <div class="hint-callout" id="checkpoint-hint">
+                <span class="hint-label">💡 Pista:</span>
+                <span class="hint-text">{{ cp.hint }}</span>
+              </div>
+            }
+          </div>
+        </section>
+      }
+
+      <!-- Quiz / Comprobación conceptual si existe -->
+      @if (activeQuiz(); as quiz) {
+        <section class="quiz-section" id="step-quiz" aria-label="Comprobación conceptual">
+          <header class="card-header">
+            <span class="card-icon">🧠</span>
+            <h3 class="card-heading">Comprobación Rápida</h3>
+          </header>
+          <div class="card-content">
+            <p class="quiz-prompt" id="quiz-prompt">{{ quiz.prompt }}</p>
+
+            <div class="quiz-options-list" id="quiz-options">
+              @for (opt of quiz.options; track $index) {
+                <button
+                  type="button"
+                  class="quiz-option-btn"
+                  [attr.data-index]="$index"
+                  [class.selected]="selectedQuizOption() === $index"
+                  [class.correct]="selectedQuizOption() === $index && isQuizCorrect() === true"
+                  [class.incorrect]="selectedQuizOption() === $index && isQuizCorrect() === false"
+                  (click)="selectQuizOption($index)"
+                >
+                  <span class="opt-num">{{ $index + 1 }}.</span>
+                  <span class="opt-text">{{ opt }}</span>
+                </button>
+              }
+            </div>
+
+            @if (selectedQuizOption() !== null) {
+              <div
+                class="quiz-feedback-box"
+                id="quiz-feedback"
+                [class.feedback-correct]="isQuizCorrect() === true"
+                [class.feedback-incorrect]="isQuizCorrect() === false"
+              >
+                @if (isQuizCorrect() === true) {
+                  <div class="feedback-status status-correct" id="quiz-result-correct">
+                    <span class="status-icon">✓</span>
+                    <span class="status-text">¡Respuesta Correcta!</span>
+                  </div>
+                } @else {
+                  <div class="feedback-status status-incorrect" id="quiz-result-incorrect">
+                    <span class="status-icon">✗</span>
+                    <span class="status-text">Respuesta Incorrecta</span>
+                  </div>
+                }
+                @if (quiz.explanation) {
+                  <p class="feedback-explanation" id="quiz-explanation">{{ quiz.explanation }}</p>
+                }
+              </div>
+            }
+          </div>
+        </section>
+      }
+    </div>
+  </div>
+</section>

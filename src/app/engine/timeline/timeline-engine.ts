@@ -32,7 +32,11 @@ export class TimelineEngine implements ITimelineEngine {
   /**
    * Loads tracks and markers into the timeline and calculates total duration.
    */
-  load(tracks: readonly TimelineTrackDefinition[], markers: readonly TimelineMarker[] = []): void {
+  load(
+    tracks: readonly TimelineTrackDefinition[],
+    markers: readonly TimelineMarker[] = [],
+    durationMs?: number,
+  ): void {
     this.assertOperational();
 
     this._tracks = tracks.map((def) => new TimelineTrack(def));
@@ -46,7 +50,7 @@ export class TimelineEngine implements ITimelineEngine {
       }
     }
     const markerMax = this._markerManager.maxTime();
-    this._totalDurationMs = Math.max(maxDuration, markerMax);
+    this._totalDurationMs = Math.max(maxDuration, markerMax, durationMs ?? 0);
 
     this.stop();
   }

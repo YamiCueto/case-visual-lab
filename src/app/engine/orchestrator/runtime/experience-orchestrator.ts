@@ -146,11 +146,10 @@ export class ExperienceOrchestrator implements IExperienceOrchestrator {
 
       this.emitEvent('ENGINES_WIRED', { sessionKey: this._context.sessionKey });
 
-      if (
-        descriptor.manifest.timeline?.tracks &&
-        Array.isArray(descriptor.manifest.timeline.tracks)
-      ) {
-        const rawTracks = descriptor.manifest.timeline.tracks as readonly Record<string, unknown>[];
+      if (descriptor.manifest.timeline) {
+        const rawTracks = Array.isArray(descriptor.manifest.timeline.tracks)
+          ? (descriptor.manifest.timeline.tracks as readonly Record<string, unknown>[])
+          : [];
         const tracks: TimelineTrackDefinition[] = rawTracks.map((t, idx) => {
           const rawFrames = t['frames'];
           const rawKeyframes = t['keyframes'];
@@ -217,12 +216,26 @@ export class ExperienceOrchestrator implements IExperienceOrchestrator {
             payload: m['payload'] as Readonly<Record<string, unknown>> | undefined,
           }));
         }
-        this._timeline.load(tracks, markers);
+
+        const durationMs =
+          typeof descriptor.manifest.timeline.durationMs === 'number'
+            ? descriptor.manifest.timeline.durationMs
+            : undefined;
+
+        this._timeline.load(tracks, markers, durationMs);
+      } else {
+        this._timeline.load([], []);
       }
 
       if (descriptor.manifest.simulation) {
         const providerId = descriptor.manifest.simulation.provider;
-        const provider = this._platformRuntime?.getSimulationProvider(providerId);
+        const currentProvider = this._simulation.activeProvider();
+        const provider =
+          this._platformRuntime?.getSimulationProvider(providerId) ??
+          (currentProvider?.providerId === providerId ? currentProvider : null);
+
+        this._simulation.reset();
+
         if (provider) {
           const scenario =
             descriptor.manifest.simulation.scenario ??
@@ -230,6 +243,8 @@ export class ExperienceOrchestrator implements IExperienceOrchestrator {
             {};
           this._simulation.initialize(provider, scenario);
         }
+      } else {
+        this._simulation.reset();
       }
 
       if (autoInitialize) {

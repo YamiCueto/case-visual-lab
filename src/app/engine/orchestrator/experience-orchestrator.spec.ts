@@ -676,4 +676,157 @@ describe('ExperienceOrchestrator (Sprint 3 — Paso 11)', () => {
       expect(orchestrator.state).toBe('DESTROYED');
     });
   });
+
+  describe('Experience Isolation & Timeline Transition (Requirements 1 & 2)', () => {
+    it('should cleanly isolate simulation state when loading lesson without simulation after simulation', async () => {
+      const { orchestrator, memoryProvider } = setupHarness();
+      memoryProvider.set('content/experiences/http.experience.json', createModernManifest());
+      memoryProvider.set('content/lessons/clean-arch.json', createLegacyManifest());
+
+      // 1. Load experience with simulation
+      await orchestrator.load('http');
+      expect(orchestrator.simulation.isInitialized()).toBe(true);
+
+      orchestrator.play();
+      orchestrator.step(100);
+      expect(orchestrator.simulation.snapshots().length).toBeGreaterThan(0);
+
+      // 2. Load legacy lesson without simulation
+      await orchestrator.load('lessons/clean-arch');
+      expect(orchestrator.simulation.isInitialized()).toBe(false);
+      expect(orchestrator.simulation.activeProvider()).toBeNull();
+      expect(orchestrator.simulation.snapshots()).toEqual([]);
+    });
+
+    it('should transition from lesson without simulation to simulation experience cleanly', async () => {
+      const memoryProvider = new MemoryProvider();
+      memoryProvider.set('content/lessons/clean-arch.json', createLegacyManifest());
+      memoryProvider.set('content/experiences/http.experience.json', createModernManifest());
+
+      const platformRuntime = ExperienceCompositionRoot.compose({
+        assetProvider: memoryProvider,
+        customProviders: [new FakeSimProvider()],
+      });
+      const orchestrator = new ExperienceOrchestrator({ platformRuntime });
+
+      // 1. Load lesson without simulation
+      await orchestrator.load('lessons/clean-arch');
+      expect(orchestrator.simulation.isInitialized()).toBe(false);
+
+      // 2. Load simulation experience
+      await orchestrator.load('http');
+      expect(orchestrator.simulation.isInitialized()).toBe(true);
+      expect(orchestrator.simulation.activeProvider()).not.toBeNull();
+    });
+
+    it('should cleanly reset simulation when switching between simulation A and simulation B', async () => {
+      const memoryProvider = new MemoryProvider();
+      const simProviderA: SimulationProvider = {
+        providerId: 'provider-a',
+        domain: 'a',
+        initialize: () => ({
+          initialState: {
+            stepIndex: 0,
+            virtualTimeMs: 0,
+            variables: { v: 'A' },
+            entities: {},
+          },
+          initialProviderState: {},
+        }),
+        step: (s) => ({ nextState: s, providerState: {}, emittedEvents: [] }),
+      };
+      const simProviderB: SimulationProvider = {
+        providerId: 'provider-b',
+        domain: 'b',
+        initialize: () => ({
+          initialState: {
+            stepIndex: 0,
+            virtualTimeMs: 0,
+            variables: { v: 'B' },
+            entities: {},
+          },
+          initialProviderState: {},
+        }),
+        step: (s) => ({ nextState: s, providerState: {}, emittedEvents: [] }),
+      };
+
+      const manifestA = {
+        ...createModernManifest(),
+        metadata: {
+          id: 'exp_a',
+          title: 'Exp A',
+          category: 't',
+          difficulty: 'easy' as const,
+          estimatedMinutes: 5,
+        },
+        simulation: { provider: 'provider-a' },
+      };
+      const manifestB = {
+        ...createModernManifest(),
+        metadata: {
+          id: 'exp_b',
+          title: 'Exp B',
+          category: 't',
+          difficulty: 'easy' as const,
+          estimatedMinutes: 5,
+        },
+        simulation: { provider: 'provider-b' },
+      };
+
+      memoryProvider.set('content/experiences/a.experience.json', manifestA);
+      memoryProvider.set('content/experiences/b.experience.json', manifestB);
+
+      const platformRuntime = ExperienceCompositionRoot.compose({
+        assetProvider: memoryProvider,
+        customProviders: [simProviderA, simProviderB],
+      });
+
+      const orchestrator = new ExperienceOrchestrator({ platformRuntime });
+
+      await orchestrator.load('a');
+      expect(orchestrator.simulation.state().variables['v']).toBe('A');
+
+      await orchestrator.load('b');
+      expect(orchestrator.simulation.state().variables['v']).toBe('B');
+      expect(orchestrator.simulation.activeProvider()?.providerId).toBe('provider-b');
+    });
+
+    it('should load legacy timeline without tracks, respect durationMs, and clear previous timeline state', async () => {
+      const { orchestrator, memoryProvider } = setupHarness();
+      memoryProvider.set('content/experiences/http.experience.json', createModernManifest());
+
+      const legacyLesson = {
+        ...createLegacyManifest(),
+        steps: [
+          {
+            step: 1,
+            title: 'Step 1',
+            explanation: 'First step',
+            sceneData: { elements: [{ id: 's1' }] },
+          },
+          {
+            step: 2,
+            title: 'Step 2',
+            explanation: 'Second step',
+            sceneData: { elements: [{ id: 's2' }] },
+          },
+        ],
+      };
+      memoryProvider.set('content/lessons/clean-arch.json', legacyLesson);
+
+      // 1. Load experience with rich tracks
+      await orchestrator.load('http');
+      expect(orchestrator.timeline.tracks().length).toBeGreaterThan(0);
+      expect(orchestrator.timeline.duration()).toBe(10000);
+
+      // 2. Load legacy lesson: has durationMs and markers, but tracks = []
+      await orchestrator.load('lessons/clean-arch');
+      expect(orchestrator.timeline.tracks()).toHaveLength(0);
+      expect(orchestrator.timeline.markers()).toHaveLength(2);
+      expect(orchestrator.timeline.duration()).toBe(8000); // 2 steps * 4000ms
+      expect(orchestrator.timeline.time()).toBe(0);
+      expect(orchestrator.timeline.snapshot().executedFrameIds).toHaveLength(0);
+      expect(orchestrator.timeline.snapshot().passedMarkerIds).toHaveLength(0);
+    });
+  });
 });

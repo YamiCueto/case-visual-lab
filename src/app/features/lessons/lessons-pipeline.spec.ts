@@ -204,6 +204,11 @@ describe('Lessons to LessonPlayer Acceptance Pipeline', () => {
     expect(playerComponent.isReady()).toBe(true);
     expect(playerComponent.runtimeState()).toBe('READY');
 
+    const contentEl = playerFixture.nativeElement.querySelector('app-lesson-content');
+    expect(contentEl).not.toBeNull();
+    const titleEl = contentEl.querySelector('#step-title');
+    expect(titleEl?.textContent?.trim()).toBe('Paso 1: El Núcleo del Dominio (Entities)');
+
     expect(() => playerComponent.play()).not.toThrow();
     expect(playerComponent.isPlaying()).toBe(true);
 
