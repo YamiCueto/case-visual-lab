@@ -1,0 +1,193 @@
+.timeline-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1rem 1.25rem;
+  background-color: var(--color-bg-timeline, #141721);
+  color: var(--color-text-timeline, #e2e8f0);
+  border: 1px solid var(--color-border-timeline, #2d3748);
+  border-radius: 8px;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+.timeline-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: monospace;
+  font-size: 0.85rem;
+}
+
+.timeline-indicators {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.indicator-item {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.indicator-label {
+  color: #718096;
+}
+
+.indicator-value {
+  font-weight: 600;
+  color: #f7fafc;
+}
+
+.status-badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  background-color: #2b3245;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.timeline-track-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.timeline-visual-bar {
+  position: relative;
+  height: 8px;
+  background-color: #232938;
+  border-radius: 4px;
+  overflow: visible;
+}
+
+.timeline-progress-fill {
+  height: 100%;
+  background-color: #38bdf8;
+  border-radius: 4px;
+  transition: width 50ms linear;
+}
+
+.timeline-playhead-marker {
+  position: absolute;
+  top: -4px;
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  background-color: #ffffff;
+  border: 2px solid #38bdf8;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
+  pointer-events: none;
+  transition: left 50ms linear;
+}
+
+.timeline-scrubber-container {
+  width: 100%;
+}
+
+.timeline-seek-slider {
+  width: 100%;
+  height: 6px;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.timeline-seek-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #38bdf8;
+  cursor: pointer;
+}
+
+.timeline-controls-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.transport-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-transport {
+  padding: 0.4rem 0.85rem;
+  border: 1px solid #3b4252;
+  background-color: #242936;
+  color: #e2e8f0;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.btn-transport:hover:not(:disabled) {
+  background-color: #32394a;
+}
+
+.btn-transport:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.speed-control-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.speed-label {
+  font-size: 0.8rem;
+  color: #718096;
+}
+
+.speed-select {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid #3b4252;
+  background-color: #242936;
+  color: #e2e8f0;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.speed-buttons {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.speed-btn {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #3b4252;
+  background-color: #1e2330;
+  color: #a0aec0;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.speed-btn.active {
+  background-color: #38bdf8;
+  color: #0f172a;
+  border-color: #38bdf8;
+  font-weight: bold;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

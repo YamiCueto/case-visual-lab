@@ -1,0 +1,137 @@
+.lesson-player-shell {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr 340px;
+  grid-template-areas:
+    'toolbar   toolbar'
+    'viewport  inspector'
+    'timeline  timeline';
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-bg-player, #0a0c10);
+  color: var(--color-text-player, #e2e8f0);
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+@media (max-width: 900px) {
+  .lesson-player-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto auto;
+    grid-template-areas:
+      'toolbar'
+      'viewport'
+      'inspector'
+      'timeline';
+  }
+}
+
+.shell-toolbar {
+  grid-area: toolbar;
+  z-index: 20;
+}
+
+.shell-viewport {
+  grid-area: viewport;
+  overflow: auto;
+  position: relative;
+  background-color: #0e1118;
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+}
+
+.shell-inspector {
+  grid-area: inspector;
+  overflow-y: auto;
+  border-left: 1px solid var(--color-border-player, #1e2433);
+  background-color: #121520;
+  max-height: 100%;
+}
+
+@media (max-width: 900px) {
+  .shell-inspector {
+    border-left: none;
+    border-top: 1px solid var(--color-border-player, #1e2433);
+    max-height: 350px;
+  }
+}
+
+.shell-timeline {
+  grid-area: timeline;
+  border-top: 1px solid var(--color-border-player, #1e2433);
+  z-index: 20;
+  background-color: #141721;
+}
+
+.shell-overlay-layer,
+.shell-notification-layer,
+.shell-dialog-layer,
+.shell-asset-browser-drawer {
+  position: absolute;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.shell-overlay-layer {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay-spinner-banner {
+  background-color: rgba(10, 12, 16, 0.85);
+  border: 1px solid #38bdf8;
+  color: #38bdf8;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  backdrop-filter: blur(4px);
+  pointer-events: auto;
+}
+
+.shell-notification-layer {
+  top: 4.5rem;
+  right: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 420px;
+}
+
+.notification-error-toast {
+  background-color: rgba(127, 29, 29, 0.95);
+  border: 1px solid #ef4444;
+  color: #fecaca;
+  padding: 0.75rem 1.25rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  pointer-events: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.shell-dialog-layer {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shell-asset-browser-drawer {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 320px;
+}

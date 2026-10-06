@@ -1,0 +1,58 @@
+<section class="runtime-host-diagnostic-panel" aria-label="Runtime Diagnostics">
+  <header class="panel-header">
+    <h2>Runtime Diagnostic Panel</h2>
+    <div class="status-indicator">
+      <span class="status-badge" [attr.data-state]="runtimeState()">{{ runtimeState() }}</span>
+      <span class="play-state-badge" [attr.data-play-state]="playState()">{{ playState() }}</span>
+    </div>
+  </header>
+
+  <div class="metrics-grid">
+    <div class="metric-item">
+      <span class="metric-label">Runtime State</span>
+      <span class="metric-value" id="runtime-state-value">{{ runtimeState() }}</span>
+    </div>
+    <div class="metric-item">
+      <span class="metric-label">Play State</span>
+      <span class="metric-value" id="play-state-value">{{ playState() }}</span>
+    </div>
+    <div class="metric-item">
+      <span class="metric-label">Virtual Time</span>
+      <span class="metric-value" id="current-time-value">{{ currentTime() }} ms</span>
+    </div>
+    <div class="metric-item">
+      <span class="metric-label">Frame</span>
+      <span class="metric-value" id="frame-number-value">{{ frameNumber() }}</span>
+    </div>
+    <div class="metric-item">
+      <span class="metric-label">Playback Speed</span>
+      <span class="metric-value" id="playback-speed-value">{{ playbackSpeed() }}x</span>
+    </div>
+    <div class="metric-item">
+      <span class="metric-label">Flags</span>
+      <span class="metric-flags" id="flags-value">
+        <span class="flag-badge" [class.active]="isReady()">Ready: {{ isReady() }}</span>
+        <span class="flag-badge" [class.active]="isPlaying()">Playing: {{ isPlaying() }}</span>
+        <span class="flag-badge" [class.active]="isPaused()">Paused: {{ isPaused() }}</span>
+        <span class="flag-badge" [class.active]="isLoading()">Loading: {{ isLoading() }}</span>
+      </span>
+    </div>
+  </div>
+
+  @if (lastError(); as error) {
+    <div class="error-banner" id="last-error-value" role="alert">
+      {{ error }}
+    </div>
+  }
+
+  <footer class="panel-controls">
+    <button type="button" id="btn-load" (click)="load('test')">Load</button>
+    <button type="button" id="btn-play" (click)="play()">Play</button>
+    <button type="button" id="btn-pause" (click)="pause()">Pause</button>
+    <button type="button" id="btn-resume" (click)="resume()">Resume</button>
+    <button type="button" id="btn-seek" (click)="seek(1000)">Seek 1000ms</button>
+    <button type="button" id="btn-stop" (click)="stop()">Stop</button>
+    <button type="button" id="btn-tick" (click)="tick(16)">Tick 16ms</button>
+    <button type="button" id="btn-destroy" (click)="destroy()">Destroy</button>
+  </footer>
+</section>

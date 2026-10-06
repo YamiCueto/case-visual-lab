@@ -1,0 +1,41 @@
+<div class="lesson-player-shell" aria-label="CASE Visual Lab Shell">
+  <div class="shell-toolbar" id="shell-toolbar">
+    <app-toolbar />
+  </div>
+
+  <main class="shell-viewport" id="shell-viewport" aria-label="Main Viewport Canvas">
+    <app-runtime-host />
+  </main>
+
+  <aside class="shell-inspector" id="shell-inspector" aria-label="Runtime Inspector Panel">
+    <app-inspector-panel />
+  </aside>
+
+  <footer class="shell-timeline" id="shell-timeline" aria-label="Timeline Scrubber and Controls">
+    <app-timeline-panel />
+  </footer>
+
+  <div class="shell-overlay-layer" id="layer-overlays" aria-label="Overlay Layer">
+    @if (isLoading()) {
+      <div class="overlay-spinner-banner" id="overlay-loading" role="status">
+        Loading experience runtime...
+      </div>
+    }
+  </div>
+
+  <div class="shell-notification-layer" id="layer-notifications" aria-label="Notification Layer">
+    @if (lastError(); as error) {
+      <div class="notification-error-toast" id="overlay-error" role="alert">
+        {{ error }}
+      </div>
+    }
+  </div>
+
+  <div class="shell-dialog-layer" id="layer-dialogs" aria-label="Dialog Layer"></div>
+
+  <div
+    class="shell-asset-browser-drawer"
+    id="layer-asset-browser"
+    aria-label="Asset Browser Drawer"
+  ></div>
+</div>

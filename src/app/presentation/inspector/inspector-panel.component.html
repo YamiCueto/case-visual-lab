@@ -1,0 +1,89 @@
+<section class="inspector-panel" aria-label="Runtime Inspector Panel">
+  <header class="inspector-header">
+    <h2 class="inspector-title">Runtime Inspector</h2>
+    <span
+      class="health-badge"
+      id="inspector-health-badge"
+      [class.has-error]="lastError() !== null"
+      [class.healthy]="lastError() === null"
+    >
+      {{ lastError() !== null ? 'ERROR' : 'HEALTHY' }}
+    </span>
+  </header>
+
+  <div class="inspector-grid">
+    <div class="inspector-card" id="card-lifecycle">
+      <h3 class="card-title">Lifecycle State</h3>
+      <div class="card-field">
+        <span class="field-label">Runtime State:</span>
+        <span
+          class="field-value badge-state"
+          id="inspector-runtime-state"
+          [attr.data-state]="runtimeState()"
+        >
+          {{ runtimeState() }}
+        </span>
+      </div>
+      <div class="card-field">
+        <span class="field-label">Play State:</span>
+        <span
+          class="field-value badge-play"
+          id="inspector-play-state"
+          [attr.data-play-state]="playState()"
+        >
+          {{ playState() }}
+        </span>
+      </div>
+    </div>
+
+    <div class="inspector-card" id="card-telemetry">
+      <h3 class="card-title">Timing & Metrics</h3>
+      <div class="card-field">
+        <span class="field-label">Current Time:</span>
+        <span class="field-value" id="inspector-current-time">{{ currentTime() }} ms</span>
+      </div>
+      <div class="card-field">
+        <span class="field-label">Current Frame:</span>
+        <span class="field-value" id="inspector-current-frame">{{ frameNumber() }}</span>
+      </div>
+      <div class="card-field">
+        <span class="field-label">Playback Speed:</span>
+        <span class="field-value" id="inspector-playback-speed">{{ playbackSpeed() }}x</span>
+      </div>
+    </div>
+
+    <div class="inspector-card" id="card-flags">
+      <h3 class="card-title">Active Flags</h3>
+      <div class="flags-grid">
+        <div class="flag-item" id="flag-ready" [class.active]="isReady()">
+          <span class="flag-name">Ready</span>
+          <span class="flag-status">{{ isReady() }}</span>
+        </div>
+        <div class="flag-item" id="flag-playing" [class.active]="isPlaying()">
+          <span class="flag-name">Playing</span>
+          <span class="flag-status">{{ isPlaying() }}</span>
+        </div>
+        <div class="flag-item" id="flag-paused" [class.active]="isPaused()">
+          <span class="flag-name">Paused</span>
+          <span class="flag-status">{{ isPaused() }}</span>
+        </div>
+        <div class="flag-item" id="flag-loading" [class.active]="isLoading()">
+          <span class="flag-name">Loading</span>
+          <span class="flag-status">{{ isLoading() }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="inspector-card" id="card-diagnostics">
+      <h3 class="card-title">Diagnostics</h3>
+      @if (lastError(); as error) {
+        <div class="error-container" id="inspector-last-error" role="alert">
+          <span class="error-icon" aria-hidden="true">⚠</span>
+          <span class="error-text">{{ error }}</span>
+        </div>
+      } @else {
+        <div class="clean-state" id="inspector-last-error">No errors detected</div>
+      }
+    </div>
+  </div>
+</section>

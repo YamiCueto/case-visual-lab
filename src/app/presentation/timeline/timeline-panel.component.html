@@ -1,0 +1,93 @@
+<section class="timeline-panel" aria-label="Playback Timeline Panel">
+  <div class="timeline-info-row">
+    <div class="timeline-indicators">
+      <div class="indicator-item">
+        <span class="indicator-label">Time:</span>
+        <span class="indicator-value" id="timeline-current-time">{{ currentTime() }} ms</span>
+      </div>
+      <div class="indicator-item">
+        <span class="indicator-label">Frame:</span>
+        <span class="indicator-value" id="timeline-frame-number">{{ frameNumber() }}</span>
+      </div>
+      <div class="indicator-item">
+        <span class="indicator-label">Speed:</span>
+        <span class="indicator-value" id="timeline-speed-value">{{ playbackSpeed() }}x</span>
+      </div>
+    </div>
+    <div class="timeline-state-wrapper">
+      <span class="status-badge" id="timeline-runtime-state" [attr.data-state]="runtimeState()">
+        {{ runtimeState() }}
+      </span>
+      <span class="status-badge" id="timeline-play-state" [attr.data-play-state]="playState()">
+        {{ playState() }}
+      </span>
+    </div>
+  </div>
+
+  <div class="timeline-track-wrapper">
+    <div class="timeline-visual-bar" id="timeline-visual-bar" aria-hidden="true">
+      <div
+        class="timeline-progress-fill"
+        id="timeline-progress-fill"
+        [style.width.%]="progressPercent()"
+      ></div>
+      <div
+        class="timeline-playhead-marker"
+        id="timeline-playhead-marker"
+        [style.left.%]="progressPercent()"
+        [attr.data-time]="currentTime()"
+      ></div>
+    </div>
+
+    <div class="timeline-scrubber-container">
+      <label for="timeline-seek-slider" class="visually-hidden">Seek Timeline Position</label>
+      <input
+        type="range"
+        id="timeline-seek-slider"
+        class="timeline-seek-slider"
+        min="0"
+        [max]="durationMs()"
+        step="1"
+        [value]="currentTime()"
+        (input)="onSeekSlider($event)"
+      />
+    </div>
+  </div>
+
+  <div class="timeline-controls-row">
+    <div class="transport-buttons" role="group" aria-label="Playback Controls">
+      <button type="button" class="btn-transport" id="btn-play" (click)="play()">Play</button>
+      <button type="button" class="btn-transport" id="btn-pause" (click)="pause()">Pause</button>
+      <button type="button" class="btn-transport" id="btn-resume" (click)="resume()">Resume</button>
+      <button type="button" class="btn-transport" id="btn-stop" (click)="stop()">Stop</button>
+    </div>
+
+    <div class="speed-control-group">
+      <label for="timeline-speed-select" class="speed-label">Speed:</label>
+      <select
+        id="timeline-speed-select"
+        class="speed-select"
+        [value]="playbackSpeed()"
+        (change)="onSpeedSelect($event)"
+      >
+        @for (speed of availableSpeeds; track speed) {
+          <option [value]="speed">{{ speed }}x</option>
+        }
+      </select>
+
+      <div class="speed-buttons" role="group" aria-label="Speed presets">
+        @for (speed of availableSpeeds; track speed) {
+          <button
+            type="button"
+            class="speed-btn"
+            [class.active]="playbackSpeed() === speed"
+            [attr.id]="'speed-btn-' + speed"
+            (click)="setSpeed(speed)"
+          >
+            {{ speed }}x
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+</section>

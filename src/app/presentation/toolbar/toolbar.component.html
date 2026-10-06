@@ -1,0 +1,72 @@
+<header class="toolbar-header" aria-label="Experience Control Toolbar">
+  <div class="toolbar-brand-section">
+    <span class="experience-title" id="toolbar-experience-title">{{ experienceTitle() }}</span>
+    <div class="toolbar-indicators">
+      <span class="badge-state" id="toolbar-runtime-state" [attr.data-state]="runtimeState()">
+        {{ runtimeState() }}
+      </span>
+      <span class="badge-play-state" id="toolbar-play-state" [attr.data-play-state]="playState()">
+        {{ playState() }}
+      </span>
+      <span class="time-display" id="toolbar-current-time"> {{ currentTime() }} ms </span>
+    </div>
+  </div>
+
+  <div class="toolbar-controls-section">
+    <div class="transport-group" role="group" aria-label="Playback Actions">
+      <button type="button" class="btn-toolbar" id="toolbar-btn-load" (click)="load('default')">
+        Load
+      </button>
+      <button
+        type="button"
+        class="btn-toolbar"
+        id="toolbar-btn-play"
+        [class.active]="isPlaying()"
+        (click)="play()"
+      >
+        Play
+      </button>
+      <button
+        type="button"
+        class="btn-toolbar"
+        id="toolbar-btn-pause"
+        [class.active]="isPaused()"
+        (click)="pause()"
+      >
+        Pause
+      </button>
+      <button type="button" class="btn-toolbar" id="toolbar-btn-resume" (click)="resume()">
+        Resume
+      </button>
+      <button type="button" class="btn-toolbar" id="toolbar-btn-stop" (click)="stop()">Stop</button>
+    </div>
+
+    <div class="speed-section">
+      <label for="toolbar-speed-select" class="speed-label">Speed:</label>
+      <select
+        id="toolbar-speed-select"
+        class="speed-select"
+        [value]="playbackSpeed()"
+        (change)="onSpeedSelect($event)"
+      >
+        @for (speed of availableSpeeds; track speed) {
+          <option [value]="speed">{{ speed }}x</option>
+        }
+      </select>
+
+      <div class="speed-pills" role="group" aria-label="Speed Quick Select">
+        @for (speed of availableSpeeds; track speed) {
+          <button
+            type="button"
+            class="btn-speed-pill"
+            [class.active]="playbackSpeed() === speed"
+            [attr.data-speed]="speed"
+            (click)="setSpeed(speed)"
+          >
+            {{ speed }}x
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+</header>

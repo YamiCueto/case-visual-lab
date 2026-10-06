@@ -1,0 +1,106 @@
+.runtime-host-diagnostic-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  background-color: var(--color-surface, #1e1e24);
+  color: var(--color-text, #f0f0f5);
+  border-radius: 8px;
+  border: 1px solid var(--color-border, #2d2d38);
+  font-family: monospace;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.status-indicator {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.status-badge,
+.play-state-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  background-color: #333344;
+  font-weight: bold;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+}
+
+.metric-item {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.metric-label {
+  font-size: 0.75rem;
+  color: #9999aa;
+  text-transform: uppercase;
+}
+
+.metric-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.metric-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.flag-badge {
+  padding: 0.125rem 0.375rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.flag-badge.active {
+  background-color: #10b981;
+  color: #ffffff;
+}
+
+.error-banner {
+  padding: 0.75rem;
+  border-radius: 4px;
+  background-color: rgba(239, 68, 68, 0.2);
+  border: 1px solid #ef4444;
+  color: #fca5a5;
+}
+
+.panel-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.panel-controls button {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #444455;
+  background-color: #2a2a38;
+  color: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.panel-controls button:hover {
+  background-color: #3b3b4f;
+}
